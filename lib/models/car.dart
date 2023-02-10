@@ -1,11 +1,14 @@
+import 'dart:ffi';
+
 class CarItem{
   final String name;
   final String description;
   final String imgPath;
   final String power;
   final String range;
-  final String seats;
+  final double seats;
   final String brand;
+  final double rating;
 
   CarItem({
     required this.name,
@@ -14,7 +17,8 @@ class CarItem{
     required this.power,
     required this.range,
     required this.seats,
-    required this.brand,});
+    required this.brand,
+    required this.rating,});
 }
 
 CarsList allCars = CarsList(cars:[
@@ -25,8 +29,9 @@ CarsList allCars = CarsList(cars:[
     imgPath: "assets/images/toyota.png",
     power: "Power",
     range: "Range",
-    seats: "Seats",
+    seats: 5,
     brand: 'Toyota',
+    rating: 4.5,
   ),
   CarItem(
     name: "Suzuki Sandero",
@@ -34,8 +39,9 @@ CarsList allCars = CarsList(cars:[
     imgPath: "assets/images/suzukiSandero.png",
     power: "Power",
     range: "Range",
-    seats: "Seats",
+    seats: 5,
     brand: 'Suzuki',
+    rating: 4.5,
 
   ),
   CarItem(
@@ -45,8 +51,9 @@ CarsList allCars = CarsList(cars:[
     imgPath: "assets/images/toyotaRav4.png",
     power: "Power",
     range: "Range",
-    seats: "Seats",
+    seats: 5,
     brand: 'Toyota',
+    rating: 4.5,
   ),
   CarItem(
 
@@ -55,8 +62,9 @@ CarsList allCars = CarsList(cars:[
     imgPath: "assets/images/toyota.png",
     power: "Power",
     range: "Range",
-    seats: "Seats",
+    seats: 4,
     brand: 'Toyota',
+    rating: 4.5,
   ),
   CarItem(
 
@@ -65,8 +73,9 @@ CarsList allCars = CarsList(cars:[
     imgPath: "assets/images/toyota.png",
     power: "Power",
     range: "Range",
-    seats: "Seats",
+    seats: 4,
     brand: 'Toyota',
+    rating: 4.5,
   ),
 
 

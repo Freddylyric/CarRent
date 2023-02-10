@@ -1,3 +1,4 @@
+import 'package:car_rent/Screens/car_details.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
 import 'package:car_rent/utils/tabs.dart';
 import 'package:car_rent/utils/utils.dart';
@@ -48,10 +49,12 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
             title: const Text('Home',
             style: mainHeading,
             ),
-            backgroundColor: AppColors.backgroundColor,
+            backgroundColor: AppColors.secondaryColor,
 
             centerTitle: true,
+            elevation: 0,
           ),
+
           // SizedBox(
           //   height: 5,
           // ),
@@ -123,73 +126,94 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
                       ListView.builder(
                           itemCount: allCars.cars.length,
                           itemBuilder: (_, i){
-                        return Container(
 
 
-                          margin: const EdgeInsets.only(left:13, right: 13, top: 5, bottom: 5),
-                          child: Container(
+                        return GestureDetector(
+                            onTap: (){
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (ctx)=> CarDetails(
+                                    name: allCars.cars[i].name,
+                                    description: allCars.cars[i].description,
+                                    imgPath: allCars.cars[i].imgPath,
+                                    power: allCars.cars[i].power,
+                                    range: allCars.cars[i].range,
+                                    seats: allCars.cars[i].seats,
+                                    brand: allCars.cars[i].brand,
+                                    rating: allCars.cars[i].rating,
+                                  )));
 
-                            decoration: BoxDecoration(
-                              // borderRadius: BorderRadius.circular(10),
 
-                              color: AppColors.secondaryColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 0),
-                                  color:Colors.grey.withOpacity(0.2),
-                                )
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(left:13, right: 13, top: 5, bottom: 5),
 
-                              ]
+                              child: Container(
+                                decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.circular(10),
+
+                            color: AppColors.secondaryColor,
+                            boxShadow: [
+                            BoxShadow(
+                            blurRadius: 2,
+                            offset: const Offset(0, 0),
+                            color:Colors.grey.withOpacity(0.2),
+                            )
+
+                            ]
                             ),
                             padding: const EdgeInsets.all(5),
 
                             child: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width:90,
-                                    height: 90,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 2,
-                                            offset: const Offset(0, 0),
-                                            color:Colors.grey.withOpacity(0.2),
-                                          )
+                            padding: const EdgeInsets.all(5),
 
-                                        ],
-                                        image: DecorationImage(
-                                          image: AssetImage(allCars.cars[i].imgPath),
-                                          fit: BoxFit.scaleDown,
+                            child: Row(
+                            children: [
+                            Container(
+                            width:90,
+                            height: 90,
+                            decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                            BoxShadow(
+                            blurRadius: 2,
+                            offset: const Offset(0, 0),
+                            color:Colors.grey.withOpacity(0.2),
+                            )
 
-                                        )
-                                    ),
+                            ],
+                            image: DecorationImage(
+                            image: AssetImage(allCars.cars[i].imgPath),
+                            fit: BoxFit.scaleDown,
 
-                                  ),
-
-                                  SizedBox(width: 10,),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(allCars.cars[i].name,
-                                        style: mainHeading,
-                                      ),
-                                      Text(allCars.cars[i].brand,
-                                        style: subHeading,
-                                        // textAlign: TextAlign.left,
-                                      ),
-                                    ],
-
-
-                                  )
-                                ],
-                              ),
+                            )
                             ),
-                          ),
-                        );
+
+                            ),
+
+                            SizedBox(width: 10,),
+                            Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                            Text(allCars.cars[i].name,
+                            style: mainHeading,
+                            ),
+                            Text(allCars.cars[i].brand,
+                            style: subHeading,
+                            // textAlign: TextAlign.left,
+                            ),
+                            ],
+
+
+                            )
+                            ],
+                            ),
+                            ),
+                            ),
+                            ),
+
+                            );
+
+
 
                       }),
                       Material(
