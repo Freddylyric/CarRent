@@ -9,123 +9,94 @@ import 'package:car_rent/models/car.dart';
 class CarsOverviewScreen extends StatefulWidget {
   const CarsOverviewScreen({Key? key}) : super(key: key);
 
-
   @override
   _CarsOverviewScreenState createState() => _CarsOverviewScreenState();
-
 }
 
 class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTickerProviderStateMixin {
-
-  late ScrollController _scrollController;
- late TabController _tabController;
-
-
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
     _tabController = TabController(length: 3, vsync: this);
-
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.menu,
-                color: Color(0xff302D2C),),
-              onPressed: () {
-                //  code to handle the menu button press
-              },
-            ),
-            title: const Text('Home',
-            style: mainHeading,
-            ),
-            backgroundColor: AppColors.secondaryColor,
-
-            centerTitle: true,
-            elevation: 0,
-          ),
-
-          // SizedBox(
-          //   height: 5,
-          // ),
-          body: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: const BoxDecoration(
-          color: Colors.white,),
-                alignment: Alignment.centerLeft,
-             child: Image.asset("assets/images/carLogo.png", height: 50,
-          width: 120,),
+        child: SafeArea(
+            child: Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.menu, color: Color(0xff302D2C)),
+                  onPressed: () {
+                    //  code to handle the menu button press
+                  },
+                ),
+                title: const Text('Home', style: mainHeading),
+                backgroundColor: AppColors.secondaryColor,
+                centerTitle: true,
+                elevation: 0,
               ),
-
-
-              Expanded(
-                  child: NestedScrollView(
-                    controller: _scrollController,
-                    headerSliverBuilder: (BuildContext context, bool isScroll ){
-
-                      return [
-                        SliverAppBar(
-                          pinned: true,
-                          backgroundColor: AppColors.secondaryColor,
-                          bottom: PreferredSize(
-                            preferredSize: const Size.fromHeight(0),
-
-                            child: Container(
-                              // margin: const EdgeInsets.all(0),
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: TabBar(
-                                indicatorPadding: const EdgeInsets.all(0),
-                                indicatorSize: TabBarIndicatorSize.label,
-                                labelPadding: const EdgeInsets.only(right: 10),
-                                controller: _tabController,
-                                isScrollable: true,
-                                indicator: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.2),
-                                      blurRadius: 7,
-                                      offset: const Offset(0, 0),
-                                    )
-                                  ]
-                                ),
-
-                                tabs: const [
-                                  AppTabs(text: "Popular"),
-                                  AppTabs(text: "Automatic"),
-                                  AppTabs(text: "Electric"),
-
+              body: Column(
+                  children: [
+              Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: const BoxDecoration(color: Colors.white),
+              alignment: Alignment.centerLeft,
+              child: Image.asset("assets/images/carLogo.png", height: 50, width: 120),
+            ),
+            Expanded(
+                child: CustomScrollView(
+                    slivers: [
+                      SliverAppBar(
+                        pinned: true,
+                        backgroundColor: AppColors.secondaryColor,
+                        bottom: PreferredSize(
+                          preferredSize: const Size.fromHeight(0),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: TabBar(
+                              indicatorPadding: const EdgeInsets.all(0),
+                              indicatorSize: TabBarIndicatorSize.label,
+                              labelPadding: const EdgeInsets.only(right: 10),
+                              controller: _tabController,
+                              isScrollable: true,
+                              indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    blurRadius: 7,
+                                    offset: const Offset(0, 0),
+                                  ),
                                 ],
-
                               ),
-                            )
+                              tabs: const [
+                                AppTabs(text: "Popular"),
+                                AppTabs(text: "Automatic"),
+                                AppTabs(text: "Electric"),
+                              ],
+                            ),
                           ),
-                        )
-                      ];
+                        ),
+                      ),
+                      SliverList(
+                          delegate: SliverChildListDelegate(
+                          [
 
-                    },
 
-                    body: TabBarView(
-                        controller: _tabController,
-                        children:  [
-                          // Container(
-                          //   child: const Text('data'),
-                          // ),
-                      ListView.builder(
+                          SizedBox(
+                            height: 550,
+                          child: TabBarView(
+                          controller: _tabController,
+                          children: [
+
+                          ListView.builder(
                           itemCount: allCars.cars.length,
-                          itemBuilder: (_, i){
+                          itemBuilder: (_, i) {
+
 
 
                         return GestureDetector(
@@ -144,7 +115,9 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
 
 
                             },
+
                             child: Container(
+
                               margin: const EdgeInsets.only(left:13, right: 13, top: 5, bottom: 5),
 
                               child: Container(
@@ -190,7 +163,7 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
 
                             ),
 
-                            SizedBox(width: 10,),
+                            const SizedBox(width: 10,),
                             Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -233,17 +206,17 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
                         ),
                       ),
 
-                    ])
-                  )
+                    ]))
+                  ]
               )
-            ]
+                      )
 
 
-      )
+      ]
 
         )
       ),
 
-    );
+    ]))));
   }
 }
