@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter/src/widgets/framework.dart';
 import '../models/car.dart';
 import '../utils/utils.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
@@ -18,8 +18,9 @@ class CarDetails extends StatelessWidget {
   final double seats ;
   final String brand ;
   final double rating;
+  final String type;
 
-  CarDetails({
+  const CarDetails({super.key,
     required this.brand,
     required this.power,
     required this.range,
@@ -27,7 +28,7 @@ class CarDetails extends StatelessWidget {
     required this.imgPath,
     required this.description,
     required this.name,
-    required this.rating,
+    required this.rating, required this.type,
 
 });
 
@@ -63,7 +64,7 @@ class CarDetails extends StatelessWidget {
                 style: mainHeading,
 
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 5,),
               const Text('Everything you need to know',
                 style: subHeading,
                 // textAlign: TextAlign.left,
@@ -142,7 +143,7 @@ class CarDetails extends StatelessWidget {
                       Container(
                         height: 70,
                         width: 386,
-                        padding: const EdgeInsets.only(left:20, top:12, bottom: 12, right: 20),
+                        padding: const EdgeInsets.only(left:20, top:10, bottom: 10, right: 20),
                         margin: const EdgeInsets.only(left: 13, top: 10, right: 13),
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.all(Radius.circular(12)),
@@ -160,7 +161,7 @@ class CarDetails extends StatelessWidget {
                             child: Row(
                               children: [
                                 SizedBox(
-                                  
+
                                   width: 100,
                                   height: 65,
                                   child: Column(
@@ -170,12 +171,10 @@ class CarDetails extends StatelessWidget {
 
                                       const Text(
                                         "Power",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: mainHeading,
                                       ),
-                                      const SizedBox(height: 8),
-                                      Text(power),
+                                      const SizedBox(height: 3),
+                                      Text(power, style: subHeading,),
                                     ],
                                   ),
                                 ),
@@ -187,12 +186,10 @@ class CarDetails extends StatelessWidget {
                                     children:  [
                                       const Text(
                                         "Seats",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: mainHeading,
                                       ),
-                                      const SizedBox(height: 8),
-                                      Text(seats.toString()),
+                                      const SizedBox(height: 3),
+                                      Text(seats.toString(), style: subHeading,),
                                     ],
                                   ),
                                 ),
@@ -204,12 +201,10 @@ class CarDetails extends StatelessWidget {
                                     children:  [
                                       const Text(
                                         "Range",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: mainHeading,
                                       ),
-                                      const SizedBox(height: 8),
-                                      Text(range),
+                                      const SizedBox(height: 3),
+                                      Text(range, style: subHeading,),
                                     ],
                                   ),
                                 ),
@@ -223,21 +218,14 @@ class CarDetails extends StatelessWidget {
 
                     ]
 
-                      
+
                   )
-                  
-                  
+
+
               ),
 
+      ]),
 
-
-          ],
-
-
-
-
-
-    ),
         bottomNavigationBar: Container(
           height: 70,
           width: 414,
@@ -281,9 +269,9 @@ class CarDetails extends StatelessWidget {
             ),
           ),
         ),
-      )
 
-      )
-    );
+
+
+    )));
   }
 }

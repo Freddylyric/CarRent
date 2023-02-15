@@ -8,7 +8,9 @@ class AppTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
+
       height: 37,
       width: 115,
       decoration: const BoxDecoration(
@@ -16,6 +18,7 @@ class AppTabs extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(6)),
       ),
       alignment: Alignment.center,
+
 
       child: Text(
         text,
