@@ -1,7 +1,7 @@
 import 'package:car_rent/Screens/nav_page.dart';
 import 'package:flutter/material.dart';
-import 'package:car_rent/Screens/cars_overview.dart';
-import 'Screens/cars_overview.dart';
+import 'package:car_rent/Screens/cars_list_page.dart';
+import 'Screens/cars_list_page.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 void main() {
@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget{
       initialRoute: '/',
       routes:{
         // '/': (context) => const (),
-    '/cars/automatic': (context) => const CarsOverviewScreen(),
-    '/cars/electric': (context) => const CarsOverviewScreen(),},
+    '/cars/automatic': (context) => const CarsListPage(),
+    '/cars/electric': (context) => const CarsListPage(),},
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.white,

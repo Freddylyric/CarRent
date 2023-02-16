@@ -1,4 +1,4 @@
-import 'package:car_rent/Screens/car_details.dart';
+import 'package:car_rent/Screens/car_details_page.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
 import 'package:car_rent/utils/tabs.dart';
 import 'package:car_rent/utils/utils.dart';
@@ -7,14 +7,14 @@ import 'package:car_rent/models/car.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 
-class CarsOverviewScreen extends StatefulWidget {
-  const CarsOverviewScreen({Key? key}) : super(key: key);
+class CarsListPage extends StatefulWidget {
+  const CarsListPage({Key? key}) : super(key: key);
 
   @override
-  _CarsOverviewScreenState createState() => _CarsOverviewScreenState();
+  _CarsListPageState createState() => _CarsListPageState();
 }
 
-class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTickerProviderStateMixin {
+class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
    TextEditingController? _textEditingController = TextEditingController();
    List <CarItem> carsOnSearch=[];
@@ -32,13 +32,13 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
             child: Scaffold(
 
               appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.menu, color: Color(0xff302D2C)),
-                  onPressed: () {
-                    //  code to handle the menu button press
-                  },
-                ),
-                title: const Text('Home', style: mainHeading),
+                // leading: IconButton(
+                //   icon: const Icon(Icons.menu, color: Color(0xff302D2C)),
+                //   onPressed: () {
+                //     //  code to handle the menu button press
+                //   },
+                // ),
+                title: const Text('Cars List', style: mainHeading),
                 backgroundColor: AppColors.secondaryColor,
                 centerTitle: true,
                 elevation: 0,
@@ -48,7 +48,7 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
               Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 2),
                     decoration: const BoxDecoration(color: Colors.white),
                     alignment: Alignment.centerLeft,
                     child: Image.asset("assets/images/carLogo.png", height: 50, width: 120),
@@ -99,9 +99,11 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
                                     isScrollable: true,
                                     indicator: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-
-
+                                      color: Colors.red,
                                     ),
+                                    indicatorColor: Colors.grey.withOpacity(0.5),
+                                    labelColor: Colors.white,
+                                    unselectedLabelColor: AppColors.bodyTextColor,
                                     tabs: const [
 
                                       AppTabs(text: "Popular"),
@@ -136,7 +138,7 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
                                                       return GestureDetector(
                                                         onTap: (){
                                                           Navigator.of(context).push(MaterialPageRoute(
-                                                              builder: (ctx)=> CarDetails(
+                                                              builder: (ctx)=> CarDetailsPage(
                                                                 name: allCars.cars[i].name,
                                                                 description: allCars.cars[i].description,
                                                                 imgPath: allCars.cars[i].imgPath,
@@ -225,6 +227,8 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
 
                                                     }),
 
+                                                /// Automatic Car List
+
                                                 _textEditingController!.text.isNotEmpty && carsOnSearch.isEmpty ?  Container(
                                                     padding: const EdgeInsets.all( 10),
                                                     child: const Text('No results found', style: mainHeading,)):
@@ -239,7 +243,7 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
                                                       return GestureDetector(
                                                         onTap: (){
                                                           Navigator.of(context).push(MaterialPageRoute(
-                                                              builder: (ctx)=> CarDetails(
+                                                              builder: (ctx)=> CarDetailsPage(
                                                                 name: automaticCars[i].name,
                                                                 description: automaticCars[i].description,
                                                                 imgPath: automaticCars[i].imgPath,
@@ -250,7 +254,6 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
                                                                 rating: automaticCars[i].rating,
                                                                 type: automaticCars[i].type,
                                                               )));
-
 
                                                         },
 
@@ -334,15 +337,17 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
                                                     child: const Text('No results found', style: mainHeading,)):
                                                 ListView.builder(
 
-                                                    itemCount: allCars.cars.where((car) => car.type == 'Electric').length,
+                                                    itemCount: _textEditingController!.text.isNotEmpty ? carsOnSearch.where((car) => car.type == 'Electric').length:
+                                                    allCars.cars.where((car) => car.type == 'Electric').length,
                                                     itemBuilder: (_, i) {
-                                                      final electricCars = allCars.cars.where((car) => car.type == 'Electric').toList();
+                                                      final electricCars = _textEditingController!.text.isNotEmpty ? carsOnSearch.where((car) => car.type == 'Electric').toList():
+                                                      allCars.cars.where((car) => car.type == 'Electric').toList();
 
 
                                                       return GestureDetector(
                                                         onTap: (){
                                                           Navigator.of(context).push(MaterialPageRoute(
-                                                              builder: (ctx)=> CarDetails(
+                                                              builder: (ctx)=> CarDetailsPage(
                                                                 name: electricCars[i].name,
                                                                 description: electricCars[i].description,
                                                                 imgPath: electricCars[i].imgPath,
@@ -396,7 +401,7 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
 
                                                                         ],
                                                                         image: DecorationImage(
-                                                                          image: AssetImage(electricCars[i].imgPath),
+                                                                          image: AssetImage( _textEditingController!.text.isNotEmpty ? carsOnSearch[i].imgPath: electricCars[i].imgPath),
                                                                           fit: BoxFit.scaleDown,
 
                                                                         )
@@ -409,11 +414,11 @@ class _CarsOverviewScreenState extends State<CarsOverviewScreen> with SingleTick
                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: [
                                                                       Text(
-                                                                        electricCars[i].name,
+                                                                        _textEditingController!.text.isNotEmpty ? carsOnSearch[i].name: electricCars[i].name,
                                                                         style: mainHeading,
                                                                       ),
                                                                       Text(
-                                                                        electricCars[i].brand,
+                                                                        _textEditingController!.text.isNotEmpty ? carsOnSearch[i].brand:  electricCars[i].brand,
                                                                         style: subHeading,
                                                                       ),
                                                                     ],

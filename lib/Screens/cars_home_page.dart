@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:car_rent/Screens/car_details.dart';
+import 'package:car_rent/Screens/car_details_page.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
 import 'package:car_rent/utils/tabs.dart';
 import 'package:car_rent/utils/utils.dart';
 import 'package:car_rent/models/car.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class CarsPage extends StatefulWidget {
-  const CarsPage({Key? key}) : super(key: key);
+class CarsHomePage extends StatefulWidget {
+  const CarsHomePage({Key? key}) : super(key: key);
 
   @override
-  State<CarsPage> createState() => _CarsPageState();
+  State<CarsHomePage> createState() => _CarsHomePageState();
 }
 
-class _CarsPageState extends State<CarsPage> with SingleTickerProviderStateMixin{
+class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderStateMixin{
   late TabController _tabController;
 
   @override
@@ -29,12 +29,12 @@ class _CarsPageState extends State<CarsPage> with SingleTickerProviderStateMixin
             child: Scaffold(
 
               appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.menu, color: Color(0xff302D2C)),
-                  onPressed: () {
-                    //  code to handle the menu button press
-                  },
-                ),
+                // leading: IconButton(
+                //   icon: const Icon(Icons.menu, color: Color(0xff302D2C)),
+                //   onPressed: () {
+                //     //  code to handle the menu button press
+                //   },
+                // ),
                 title: const Text('Home', style: mainHeading),
                 backgroundColor: AppColors.secondaryColor,
                 centerTitle: true,
@@ -45,7 +45,7 @@ class _CarsPageState extends State<CarsPage> with SingleTickerProviderStateMixin
               Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 2),
                     decoration: const BoxDecoration(color: Colors.white),
                     alignment: Alignment.centerLeft,
                     child: Image.asset("assets/images/carLogo.png", height: 50, width: 120),
@@ -69,8 +69,11 @@ class _CarsPageState extends State<CarsPage> with SingleTickerProviderStateMixin
                                     labelPadding: const EdgeInsets.only(right: 10),
                                     controller: _tabController,
                                     isScrollable: true,
+                                    indicatorColor: Colors.grey,
+                                    labelColor: Colors.white,
+                                    unselectedLabelColor: AppColors.bodyTextColor,
                                     indicator: BoxDecoration(
-
+                                      color: Colors.red,
                                       borderRadius: BorderRadius.circular(10),
                                       boxShadow: [
                                         BoxShadow(
@@ -129,7 +132,7 @@ class _CarsPageState extends State<CarsPage> with SingleTickerProviderStateMixin
                                                       return GestureDetector(
                                                         onTap: (){
                                                           Navigator.of(context).push(MaterialPageRoute(
-                                                              builder: (ctx)=> CarDetails(
+                                                              builder: (ctx)=> CarDetailsPage(
                                                                 name: allCars.cars[i].name,
                                                                 description: allCars.cars[i].description,
                                                                 imgPath: allCars.cars[i].imgPath,

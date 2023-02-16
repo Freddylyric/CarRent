@@ -1,6 +1,6 @@
-import 'package:car_rent/Screens/cars_overview.dart';
-import 'package:car_rent/Screens/cars_page.dart';
-import 'package:car_rent/Screens/car_details.dart';
+import 'package:car_rent/Screens/cars_list_page.dart';
+import 'package:car_rent/Screens/cars_home_page.dart';
+import 'package:car_rent/Screens/car_details_page.dart';
 import 'package:car_rent/Screens/share_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +20,8 @@ class _NavPageState extends State<NavPage> {
   int currentIndex = 0;
 
   final screens = [
-    const CarsPage(),
-    const CarsOverviewScreen(),
+    const CarsHomePage(),
+    const CarsListPage(),
     const SharePage(),
     const NotificationsPage(),
 
@@ -42,11 +42,13 @@ class _NavPageState extends State<NavPage> {
         backgroundColor: AppColors.backgroundColor,
         selectedItemColor: Colors.red,
         unselectedItemColor: Colors.grey,
+        selectedFontSize: 0,
+        unselectedFontSize: 0,
 
         onTap: (index) => setState(()=>  currentIndex = index),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.car_rental), label: 'Cars'),
+          BottomNavigationBarItem(icon: Icon(Icons.directions_car), label: 'Cars'),
           BottomNavigationBarItem(icon: Icon(Icons.send), label: 'Share'),
           BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notifications'),
         ],
