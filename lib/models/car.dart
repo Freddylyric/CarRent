@@ -9,6 +9,7 @@ class CarItem{
   final double seats;
   final String brand;
   final double rating;
+  final String type;
 
   CarItem({
     required this.name,
@@ -18,7 +19,8 @@ class CarItem{
     required this.range,
     required this.seats,
     required this.brand,
-    required this.rating,});
+    required this.rating,
+    required this.type,});
 }
 
 CarsList allCars = CarsList(cars:[
@@ -32,6 +34,7 @@ CarsList allCars = CarsList(cars:[
     seats: 5,
     brand: 'Toyota',
     rating: 4.5,
+    type: 'Automatic',
   ),
   CarItem(
     name: "Suzuki Sandero",
@@ -42,6 +45,7 @@ CarsList allCars = CarsList(cars:[
     seats: 5,
     brand: 'Suzuki',
     rating: 4.5,
+    type: 'Automatic',
 
   ),
   CarItem(
@@ -54,6 +58,7 @@ CarsList allCars = CarsList(cars:[
     seats: 5,
     brand: 'Toyota',
     rating: 4.5,
+    type: 'Automatic',
   ),
   CarItem(
 
@@ -65,6 +70,7 @@ CarsList allCars = CarsList(cars:[
     seats: 4,
     brand: 'Toyota',
     rating: 4.5,
+    type: 'Electric',
   ),
   CarItem(
 
@@ -75,12 +81,15 @@ CarsList allCars = CarsList(cars:[
     range: "Range",
     seats: 4,
     brand: 'Toyota',
-    rating: 4.5,
+    rating: 4.5, type: 'Electric',
   ),
 
 
 ]);
 class CarsList{
   List <CarItem> cars;
+  // List <CarItem> carsOnSearch;
   CarsList({required this.cars});
+
+
 }
