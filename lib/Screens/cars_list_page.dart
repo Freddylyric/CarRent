@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:car_rent/Screens/car_details_page.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
 import 'package:car_rent/utils/tabs.dart';
 import 'package:car_rent/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:car_rent/models/car.dart';
+import 'package:car_rent/models/car_model.dart';
+import 'package:car_rent/Screens/cars_home_page.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:hive/hive.dart';
 
 
 class CarsListPage extends StatefulWidget {
@@ -17,21 +21,37 @@ class CarsListPage extends StatefulWidget {
 class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
    TextEditingController? _textEditingController = TextEditingController();
-   List <CarItem> carsOnSearch=[];
+   List <Car> carsOnSearch=[];
+
+
+
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+
+
   }
 
   @override
   Widget build(BuildContext context) {
+
+    final box = Hive.box<Car>('car');
+    final List<Car> allCars = box.values.toList();
+    final filteredCars = _textEditingController!.text.isNotEmpty ? carsOnSearch :allCars;
+    final filteredAutomaticCars = filteredCars.where((car) => car.type == 'Automatic').toList();
+    final filteredElectricCars = filteredCars.where((car) => car.type == 'Electric').toList();
     return Container(
         child: SafeArea(
             child: Scaffold(
 
               appBar: AppBar(
+
+                leading: const BackButton(
+                  color: Color(0xff302D2C),
+                ),
                 // leading: IconButton(
                 //   icon: const Icon(Icons.menu, color: Color(0xff302D2C)),
                 //   onPressed: () {
@@ -57,13 +77,13 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
 
                   //search bar
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: TextField(
 
                       onChanged: (value){
                         setState(() {
 
-                          carsOnSearch = allCars.cars.where((car) => car.name.toLowerCase().contains(value.toLowerCase())).toList();
+                          carsOnSearch = allCars.where((car) => car.name?.toLowerCase().contains(value.toLowerCase()) ?? false).toList();
 
                         });
                       },
@@ -129,99 +149,65 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                   padding: const EdgeInsets.all( 10),
                                                     child: const Text('No results found', style: mainHeading,)):
 
+
+
+
+
+
+
                                                 ListView.builder(
-                                                    itemCount: _textEditingController!.text.isNotEmpty ? carsOnSearch.length: allCars.cars.length,
+                                                    itemCount: filteredCars.length,
                                                     itemBuilder: (_, i) {
+                                                      return  Card( child: Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: ListTile(
+                                                            onTap: (){
+                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
+                                                                  brand: filteredCars[i]. brand,
+                                                                  power: filteredCars[i]. power,
+                                                                  range: filteredCars[i].range,
+                                                                  seats: filteredCars[i].seats,
+                                                                  imgPath: filteredCars[i].imgPath,
+                                                                  description: filteredCars[i].description,
+                                                                  name: filteredCars[i].name,
+                                                                  rating: filteredCars[i].rating,
+                                                                  type: filteredCars[i].type)));
+                                                            },
 
+                                                            leading: Container(
+                                                              width:90,
+                                                              height: 90,
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  boxShadow:  [
+                                                                    BoxShadow(
+                                                                      blurRadius: 2,
+                                                                      offset: Offset(0, 2),
+                                                                      color:Colors.grey.withOpacity(0.1),
+                                                                    )
 
-
-                                                      return GestureDetector(
-                                                        onTap: (){
-                                                          Navigator.of(context).push(MaterialPageRoute(
-                                                              builder: (ctx)=> CarDetailsPage(
-                                                                name: allCars.cars[i].name,
-                                                                description: allCars.cars[i].description,
-                                                                imgPath: allCars.cars[i].imgPath,
-                                                                power: allCars.cars[i].power,
-                                                                range: allCars.cars[i].range,
-                                                                seats: allCars.cars[i].seats,
-                                                                brand: allCars.cars[i].brand,
-                                                                rating: allCars.cars[i].rating,
-                                                                type: allCars.cars[i].type,
-                                                              )));
-
-
-                                                        },
-
-                                                        child: Container(
-
-                                                          margin: const EdgeInsets.only(left:13, right: 13, top: 5, bottom: 5),
-
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                              // borderRadius: BorderRadius.circular(10),
-
-                                                                color: AppColors.secondaryColor,
-                                                                boxShadow: [
-                                                                  BoxShadow(
-                                                                    blurRadius: 2,
-                                                                    offset: const Offset(0, 0),
-                                                                    color:Colors.grey.withOpacity(0.2),
-                                                                  )
-
-                                                                ]
-                                                            ),
-                                                            padding: const EdgeInsets.all(5),
-
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(5),
-
-                                                              child: Row(
-                                                                children: [
-                                                                  Container(
-                                                                    width:90,
-                                                                    height: 90,
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(10),
-                                                                        boxShadow: [
-                                                                          BoxShadow(
-                                                                            blurRadius: 2,
-                                                                            offset: const Offset(0, 0),
-                                                                            color:Colors.grey.withOpacity(0.2),
-                                                                          )
-
-                                                                        ],
-                                                                        image: DecorationImage(
-                                                                          image: AssetImage(_textEditingController!.text.isNotEmpty ? carsOnSearch[i].imgPath:allCars.cars[i].imgPath),
-                                                                          fit: BoxFit.scaleDown,
-
-                                                                        )
-                                                                    ),
-
-                                                                  ),
-
-                                                                  const SizedBox(width: 10,),
-                                                                  Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Text(_textEditingController!.text.isNotEmpty ? carsOnSearch[i].name:allCars.cars[i].name,
-                                                                        style: mainHeading,
-                                                                      ),
-                                                                      Text(_textEditingController!.text.isNotEmpty ? carsOnSearch[i].brand: allCars.cars[i].brand,
-                                                                        style: subHeading,
-                                                                        // textAlign: TextAlign.left,
-                                                                      ),
-                                                                    ],
-
+                                                                  ],
+                                                                  image: DecorationImage(
+                                                                    image: FileImage(File(filteredCars[i].imgPath.toString()),),
+                                                                    fit: BoxFit.scaleDown,
 
                                                                   )
-                                                                ],
+
                                                               ),
                                                             ),
-                                                          ),
-                                                        ),
+                                                            title:Text(filteredCars[i]. name.toString(), style: mainHeading,),
+                                                            subtitle: Text(filteredCars[i]. description.toString(), style: subHeading, maxLines: 2,
+                                                              overflow: TextOverflow.ellipsis,),
 
-                                                      );
+
+                                                            trailing: IconButton(
+                                                              onPressed: (){
+                                                                box.deleteAt(i);
+                                                              },
+                                                              icon: const Icon(Icons.delete),
+                                                            )
+                                                        ),
+                                                      ),);
 
 
 
@@ -233,100 +219,59 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                     padding: const EdgeInsets.all( 10),
                                                     child: const Text('No results found', style: mainHeading,)):
                                                 ListView.builder(
-
-                                                    itemCount: _textEditingController!.text.isNotEmpty ? carsOnSearch.where((car) => car.type == 'Automatic').length: allCars.cars.where((car) => car.type == 'Automatic').length,
+                                                    itemCount: filteredAutomaticCars.length,
                                                     itemBuilder: (_, i) {
-                                                      final automaticCars = _textEditingController!.text.isNotEmpty ? carsOnSearch.where((car) => car.type == 'Automatic').toList():
-                                                                            allCars.cars.where((car) => car.type == 'Automatic').toList();
 
+                                                      return  Card( child: Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: ListTile(
+                                                            onTap: (){
+                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
+                                                                  brand: filteredAutomaticCars[i]. brand,
+                                                                  power: filteredAutomaticCars[i]. power,
+                                                                  range: filteredAutomaticCars[i].range,
+                                                                  seats: filteredAutomaticCars[i].seats,
+                                                                  imgPath: filteredAutomaticCars[i].imgPath,
+                                                                  description: filteredAutomaticCars[i].description,
+                                                                  name: filteredAutomaticCars[i].name,
+                                                                  rating: filteredAutomaticCars[i].rating,
+                                                                  type: filteredAutomaticCars[i].type)));
+                                                            },
 
-                                                      return GestureDetector(
-                                                        onTap: (){
-                                                          Navigator.of(context).push(MaterialPageRoute(
-                                                              builder: (ctx)=> CarDetailsPage(
-                                                                name: automaticCars[i].name,
-                                                                description: automaticCars[i].description,
-                                                                imgPath: automaticCars[i].imgPath,
-                                                                power: automaticCars[i].power,
-                                                                range: automaticCars[i].range,
-                                                                seats: automaticCars[i].seats,
-                                                                brand: automaticCars[i].brand,
-                                                                rating: automaticCars[i].rating,
-                                                                type: automaticCars[i].type,
-                                                              )));
+                                                            leading: Container(
+                                                              width:90,
+                                                              height: 90,
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  boxShadow:  [
+                                                                    BoxShadow(
+                                                                      blurRadius: 2,
+                                                                      offset: Offset(0, 2),
+                                                                      color:Colors.grey.withOpacity(0.1),
+                                                                    )
 
-                                                        },
-
-                                                        child: Container(
-
-                                                          margin: const EdgeInsets.only(left:13, right: 13, top: 5, bottom: 5),
-
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                              // borderRadius: BorderRadius.circular(10),
-
-                                                                color: AppColors.secondaryColor,
-                                                                boxShadow: [
-                                                                  BoxShadow(
-                                                                    blurRadius: 2,
-                                                                    offset: const Offset(0, 0),
-                                                                    color:Colors.grey.withOpacity(0.2),
-                                                                  )
-
-                                                                ]
-                                                            ),
-                                                            padding: const EdgeInsets.all(5),
-
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(5),
-
-                                                              child: Row(
-                                                                children: [
-                                                                  Container(
-                                                                    width:90,
-                                                                    height: 90,
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(10),
-                                                                        boxShadow: [
-                                                                          BoxShadow(
-                                                                            blurRadius: 2,
-                                                                            offset: const Offset(0, 0),
-                                                                            color:Colors.grey.withOpacity(0.2),
-                                                                          )
-
-                                                                        ],
-                                                                        image: DecorationImage(
-                                                                          image: AssetImage(_textEditingController!.text.isNotEmpty ? carsOnSearch[i].imgPath: automaticCars[i].imgPath),
-                                                                          fit: BoxFit.scaleDown,
-
-                                                                        )
-                                                                    ),
-
-                                                                  ),
-
-                                                                  const SizedBox(width: 10,),
-                                                                  Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Text(
-                                                                        _textEditingController!.text.isNotEmpty ? carsOnSearch[i].name: automaticCars[i].name,
-                                                                        style: mainHeading,
-                                                                      ),
-                                                                      Text(
-                                                                        _textEditingController!.text.isNotEmpty ? carsOnSearch[i].brand: automaticCars[i].brand,
-                                                                        style: subHeading,
-                                                                      ),
-                                                                    ],
-
+                                                                  ],
+                                                                  image: DecorationImage(
+                                                                    image: FileImage(File(filteredAutomaticCars[i].imgPath.toString()),),
+                                                                    fit: BoxFit.scaleDown,
 
                                                                   )
-                                                                ],
+
                                                               ),
                                                             ),
-                                                          ),
-                                                        ),
+                                                            title:Text(filteredAutomaticCars[i]. name.toString(), style: mainHeading,),
+                                                            subtitle: Text(filteredAutomaticCars[i]. description.toString(), style: subHeading, maxLines: 2,
+                                                              overflow: TextOverflow.ellipsis,),
 
-                                                      );
+
+                                                            trailing: IconButton(
+                                                              onPressed: (){
+                                                                box.deleteAt(i);
+                                                              },
+                                                              icon: const Icon(Icons.delete),
+                                                            )
+                                                        ),
+                                                      ),);
 
 
 
@@ -335,100 +280,63 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                 _textEditingController!.text.isNotEmpty && carsOnSearch.isEmpty ?  Container(
                                                     padding: const EdgeInsets.all( 10),
                                                     child: const Text('No results found', style: mainHeading,)):
+
+
                                                 ListView.builder(
-
-                                                    itemCount: _textEditingController!.text.isNotEmpty ? carsOnSearch.where((car) => car.type == 'Electric').length:
-                                                    allCars.cars.where((car) => car.type == 'Electric').length,
+                                                    itemCount: filteredElectricCars.length,
                                                     itemBuilder: (_, i) {
-                                                      final electricCars = _textEditingController!.text.isNotEmpty ? carsOnSearch.where((car) => car.type == 'Electric').toList():
-                                                      allCars.cars.where((car) => car.type == 'Electric').toList();
 
 
-                                                      return GestureDetector(
-                                                        onTap: (){
-                                                          Navigator.of(context).push(MaterialPageRoute(
-                                                              builder: (ctx)=> CarDetailsPage(
-                                                                name: electricCars[i].name,
-                                                                description: electricCars[i].description,
-                                                                imgPath: electricCars[i].imgPath,
-                                                                power: electricCars[i].power,
-                                                                range: electricCars[i].range,
-                                                                seats: electricCars[i].seats,
-                                                                brand: electricCars[i].brand,
-                                                                rating: electricCars[i].rating,
-                                                                type: electricCars[i].type,
-                                                              )));
+                                                      return  Card( child: Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: ListTile(
+                                                            onTap: (){
+                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
+                                                                  brand: filteredElectricCars[i]. brand,
+                                                                  power: filteredElectricCars[i]. power,
+                                                                  range: filteredElectricCars[i].range,
+                                                                  seats: filteredElectricCars[i].seats,
+                                                                  imgPath: filteredElectricCars[i].imgPath,
+                                                                  description: filteredElectricCars[i].description,
+                                                                  name: filteredElectricCars[i].name,
+                                                                  rating: filteredElectricCars[i].rating,
+                                                                  type: filteredElectricCars[i].type)));
+                                                            },
 
+                                                            leading: Container(
+                                                              width:90,
+                                                              height: 90,
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(10),
+                                                                  boxShadow:  [
+                                                                    BoxShadow(
+                                                                      blurRadius: 2,
+                                                                      offset: Offset(0, 2),
+                                                                      color:Colors.grey.withOpacity(0.1),
+                                                                    )
 
-                                                        },
+                                                                  ],
+                                                                  image: DecorationImage(
+                                                                    image: FileImage(File(filteredElectricCars[i].imgPath.toString()),),
+                                                                    fit: BoxFit.scaleDown,
 
-                                                        child: Container(
-
-                                                          margin: const EdgeInsets.only(left:13, right: 13, top: 5, bottom: 5),
-
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                              // borderRadius: BorderRadius.circular(10),
-
-                                                                color: AppColors.secondaryColor,
-                                                                boxShadow: [
-                                                                  BoxShadow(
-                                                                    blurRadius: 2,
-                                                                    offset: const Offset(0, 0),
-                                                                    color:Colors.grey.withOpacity(0.2),
                                                                   )
 
-                                                                ]
-                                                            ),
-                                                            padding: const EdgeInsets.all(5),
-
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(5),
-
-                                                              child: Row(
-                                                                children: [
-                                                                  Container(
-                                                                    width:90,
-                                                                    height: 90,
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(10),
-                                                                        boxShadow: [
-                                                                          BoxShadow(
-                                                                            blurRadius: 2,
-                                                                            offset: const Offset(0, 0),
-                                                                            color:Colors.grey.withOpacity(0.2),
-                                                                          )
-
-                                                                        ],
-                                                                        image: DecorationImage(
-                                                                          image: AssetImage( _textEditingController!.text.isNotEmpty ? carsOnSearch[i].imgPath: electricCars[i].imgPath),
-                                                                          fit: BoxFit.scaleDown,
-
-                                                                        )
-                                                                    ),
-
-                                                                  ),
-
-                                                                  const SizedBox(width: 10,),
-                                                                  Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Text(
-                                                                        _textEditingController!.text.isNotEmpty ? carsOnSearch[i].name: electricCars[i].name,
-                                                                        style: mainHeading,
-                                                                      ),
-                                                                      Text(
-                                                                        _textEditingController!.text.isNotEmpty ? carsOnSearch[i].brand:  electricCars[i].brand,
-                                                                        style: subHeading,
-                                                                      ),
-                                                                    ],
-                                                                  )
-                                                                ],
                                                               ),
                                                             ),
-                                                          ),
+                                                            title:Text(filteredElectricCars[i]. name.toString(), style: mainHeading,),
+                                                            subtitle: Text(filteredElectricCars[i]. description.toString(), style: subHeading, maxLines: 2,
+                                                              overflow: TextOverflow.ellipsis,),
+
+
+                                                            trailing: IconButton(
+                                                              onPressed: (){
+                                                                box.deleteAt(i);
+                                                              },
+                                                              icon: const Icon(Icons.delete),
+                                                            )
                                                         ),
-                                                      );
+                                                      ),);
                                                     }),
                                               ]))
                                     ]

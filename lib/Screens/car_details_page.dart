@@ -1,8 +1,9 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import '../models/car.dart';
+import '../models/car_model.dart';
 import '../utils/utils.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
 
@@ -10,25 +11,25 @@ import 'package:car_rent/utils/colors.dart' as AppColors;
 class CarDetailsPage extends StatelessWidget {
   // const CarDetails({Key? key}) : super(key: key);
 
-  final String name;
-  final String description ;
-  final String imgPath;
-  final String power;
-  final String range;
-  final double seats ;
-  final String brand ;
-  final double rating;
-  final String type;
+  final String? name;
+  final String? description ;
+  final String? imgPath;
+  final  String?  power;
+  final  String? range;
+  final  String?  seats ;
+  final String? brand ;
+  final  String?  rating;
+  final String? type;
 
   const CarDetailsPage({super.key,
-    required this.brand,
-    required this.power,
-    required this.range,
-    required this.seats,
-    required this.imgPath,
-    required this.description,
-    required this.name,
-    required this.rating, required this.type,
+    @required this.brand,
+    @required this.power,
+    @required this.range,
+    @required this.seats,
+    @required this.imgPath,
+    @required this.description,
+    @required this.name,
+    @required this.rating, @required this.type,
 
 });
 
@@ -52,10 +53,10 @@ class CarDetailsPage extends StatelessWidget {
     ),
 
 
-        body: Column(
+        body: ListView(
 
 
-            crossAxisAlignment: CrossAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.start,
 
           children:  [
 
@@ -114,21 +115,21 @@ class CarDetailsPage extends StatelessWidget {
 
                           ],
                           image: DecorationImage(
-                            image: AssetImage(imgPath),
-                            fit: BoxFit.scaleDown,
+                            image: FileImage(File(imgPath.toString()),
+                            // fit: BoxFit.scaleDown,
 
                           )
                       ),
 
                     ),
 
-
-                    SizedBox(height: 10,),
-                    Text(name,
+                    ),
+                    const SizedBox(height: 10,),
+                    Text(name.toString(),
                       style: mainHeading,
                     ),
                     const SizedBox(height: 5,),
-                    Text(brand,
+                    Text(brand.toString(),
                       style: subHeading,
                       // textAlign: TextAlign.left,
                     ),
@@ -143,10 +144,10 @@ class CarDetailsPage extends StatelessWidget {
                     ),
 
                     const Text('Description', style: mainHeading,),
-                    SizedBox(height: 5,),
-                    Text(description, style: subHeading,),
+                    const SizedBox(height: 5,),
+                    Text(description .toString(), style: subHeading,),
 
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     Container(
                       height: 70,
                       width: 386,
@@ -181,7 +182,7 @@ class CarDetailsPage extends StatelessWidget {
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(power, style: subHeading,),
+                                    Text(power.toString(), style: subHeading,),
                                   ],
                                 ),
                               ),
@@ -211,7 +212,7 @@ class CarDetailsPage extends StatelessWidget {
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(range, style: subHeading,),
+                                    Text(range.toString(), style: subHeading,),
                                   ],
                                 ),
                               ),
@@ -223,7 +224,7 @@ class CarDetailsPage extends StatelessWidget {
 
 
 
-                  ]
+                    ]
 
 
                 )

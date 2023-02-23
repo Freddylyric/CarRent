@@ -1,7 +1,7 @@
 import 'package:car_rent/Screens/cars_list_page.dart';
 import 'package:car_rent/Screens/cars_home_page.dart';
 import 'package:car_rent/Screens/car_details_page.dart';
-import 'package:car_rent/Screens/share_page.dart';
+import 'package:car_rent/Screens/add_car.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -22,7 +22,7 @@ class _NavPageState extends State<NavPage> {
   final screens = [
     const CarsHomePage(),
     const CarsListPage(),
-    const SharePage(),
+    const AddCarScreen(),
     const NotificationsPage(),
 
 

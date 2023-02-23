@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:car_rent/Screens/car_details_page.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
 import 'package:car_rent/utils/tabs.dart';
 import 'package:car_rent/utils/utils.dart';
-import 'package:car_rent/models/car.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:car_rent/models/car_model.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class CarsHomePage extends StatefulWidget {
   const CarsHomePage({Key? key}) : super(key: key);
@@ -16,17 +19,20 @@ class CarsHomePage extends StatefulWidget {
 class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderStateMixin{
   late TabController _tabController;
 
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+    // _carBox = _carsList.carBox;
+    // _carsList.loadCars();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: SafeArea(
-            child: Scaffold(
+    return Scaffold(
+
 
               appBar: AppBar(
                 // leading: IconButton(
@@ -40,9 +46,9 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                 centerTitle: true,
                 elevation: 0,
               ),
-              body:
+              body: SafeArea(
 
-              Column(
+             child:  Column(
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 2),
@@ -116,145 +122,109 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                                 delegate: SliverChildListDelegate(
                                     [
 
-
                                       SizedBox(
                                           height: 550,
                                           child: TabBarView(
                                               controller: _tabController,
                                               children: [
 
-                                                ListView.builder(
-                                                    itemCount: allCars.cars.length,
-                                                    itemBuilder: (_, i) {
+                                                ValueListenableBuilder
+                                                  (valueListenable: Hive.box<Car>('car').listenable(),
+                                                    builder: (context, Box <Car> box, _) {
+                                                      // final allCars = box.values.toList();
 
+                                                      return ListView.builder(
+                                                          itemCount: box.length,
+                                                          itemBuilder: (ctx,
+                                                              i) {
+                                                            final car = box.getAt(i);
 
+                                                           return  Card( child: Padding(
+                                                             padding: const EdgeInsets.all(8.0),
+                                                             child: ListTile(
+                                                               onTap: (){
+                                                                 Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
+                                                                     brand: car!. brand,
+                                                                     power: car!. power,
+                                                                     range: car!.range,
+                                                                     seats: car!.seats,
+                                                                     imgPath: car!.imgPath,
+                                                                     description: car!.description,
+                                                                     name: car!.name,
+                                                                     rating: car!.rating,
+                                                                     type: car!.type)));
+                                                               },
 
-                                                      return GestureDetector(
-                                                        onTap: (){
-                                                          Navigator.of(context).push(MaterialPageRoute(
-                                                              builder: (ctx)=> CarDetailsPage(
-                                                                name: allCars.cars[i].name,
-                                                                description: allCars.cars[i].description,
-                                                                imgPath: allCars.cars[i].imgPath,
-                                                                power: allCars.cars[i].power,
-                                                                range: allCars.cars[i].range,
-                                                                seats: allCars.cars[i].seats,
-                                                                brand: allCars.cars[i].brand,
-                                                                rating: allCars.cars[i].rating,
-                                                                type: allCars.cars[i].type,
-                                                              )));
-
-
-                                                        },
-
-                                                        child: Container(
-
-                                                          margin: const EdgeInsets.only(left:13, right: 13, top: 5, bottom: 5),
-
-                                                          child: Container(
+                                                               leading: Container(
+                                                            width:90,
+                                                            height: 90,
                                                             decoration: BoxDecoration(
-                                                              // borderRadius: BorderRadius.circular(10),
+                                                            borderRadius: BorderRadius.circular(10),
+                                                            boxShadow:  [
+                                                            BoxShadow(
+                                                            blurRadius: 2,
+                                                            offset: Offset(0, 2),
+                                                            color:Colors.grey.withOpacity(0.1),
+                                                            )
 
-                                                                color: AppColors.secondaryColor,
-                                                                boxShadow: [
-                                                                  BoxShadow(
-                                                                    blurRadius: 2,
-                                                                    offset: const Offset(0, 0),
-                                                                    color:Colors.grey.withOpacity(0.2),
-                                                                  )
+                                                            ],
+                                                                image: DecorationImage(
+                                                                  image: FileImage(File(car!.imgPath.toString()),),
+                                                                  fit: BoxFit.scaleDown,
 
-                                                                ]
-                                                            ),
-                                                            padding: const EdgeInsets.all(5),
+                                                                )
 
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(5),
-
-                                                              child: Row(
-                                                                children: [
-                                                                  Container(
-                                                                    width:90,
-                                                                    height: 90,
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(10),
-                                                                        boxShadow: [
-                                                                          BoxShadow(
-                                                                            blurRadius: 2,
-                                                                            offset: const Offset(0, 0),
-                                                                            color:Colors.grey.withOpacity(0.2),
-                                                                          )
-
-                                                                        ],
-                                                                        image: DecorationImage(
-                                                                          image: AssetImage(allCars.cars[i].imgPath),
-                                                                          fit: BoxFit.scaleDown,
-
-                                                                        )
-                                                                    ),
-
-                                                                  ),
-
-                                                                  const SizedBox(width: 10,),
-                                                                  Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Text(allCars.cars[i].name,
-                                                                        style: mainHeading,
-                                                                      ),
-                                                                      Text(allCars.cars[i].brand,
-                                                                        style: subHeading,
-                                                                        // textAlign: TextAlign.left,
-                                                                      ),
-                                                                    ],
+                                                               ),
+                                                               ),
+                                                               title:Text(car!. name.toString(), style: mainHeading,),
+                                                               subtitle: Text(car!. description.toString(), style: subHeading,  maxLines: 2,
+                                                                 overflow: TextOverflow.ellipsis,),
 
 
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
+                                                                 trailing: IconButton(
+                                                                   onPressed: (){
+                                                                     box.deleteAt(i);
+                                                                   },
+                                                                   icon: const Icon(Icons.delete),
+                                                                 )
+                                                             ),
+                                                           ),);
 
-                                                      );
 
+                                                          });
+                                                      // Material(
+                                                      //   child: ListTile(
+                                                      //     leading: CircleAvatar(
+                                                      //       backgroundColor: Colors.grey,
+                                                      //     ),
+                                                      //     title: Text('Content'),
+                                                      //   ),
+                                                      // );
+                                                      // Material(
+                                                      //   child: ListTile(
+                                                      //     leading: CircleAvatar(
+                                                      //       backgroundColor: Colors.grey,
+                                                      //     ),
+                                                      //     title: Text('Content'),
+                                                      //   ),
+                                                      // );
 
-
-                                                    }),
-                                                Material(
-                                                  child: ListTile(
-                                                    leading: CircleAvatar(
-                                                      backgroundColor: Colors.grey,
-                                                    ),
-                                                    title: Text('Content'),
-                                                  ),
-                                                ),
-                                                Material(
-                                                  child: ListTile(
-                                                    leading: CircleAvatar(
-                                                      backgroundColor: Colors.grey,
-                                                    ),
-                                                    title: Text('Content'),
-                                                  ),
-                                                ),
-
-                                              ]))
-                                    ]
+                                                    } )]
+                                 )
                                 )
-                            )
-
-
-                          ]
-
+                            ]
+                                )
                       )
-                  ),
-
-                ],
-
+                  ],
+                      ),
               ),
+            ])
+            )
 
 
-            ))
-    );
+        );
+
+
   }
 }
 
