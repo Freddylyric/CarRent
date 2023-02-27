@@ -162,16 +162,8 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                         padding: const EdgeInsets.all(8.0),
                                                         child: ListTile(
                                                             onTap: (){
-                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
-                                                                  brand: filteredCars[i]. brand,
-                                                                  power: filteredCars[i]. power,
-                                                                  range: filteredCars[i].range,
-                                                                  seats: filteredCars[i].seats,
-                                                                  imgPath: filteredCars[i].imgPath,
-                                                                  description: filteredCars[i].description,
-                                                                  name: filteredCars[i].name,
-                                                                  rating: filteredCars[i].rating,
-                                                                  type: filteredCars[i].type)));
+
+                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(car:filteredCars[i])));
                                                             },
 
                                                             leading: Container(
@@ -226,16 +218,8 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                         padding: const EdgeInsets.all(8.0),
                                                         child: ListTile(
                                                             onTap: (){
-                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
-                                                                  brand: filteredAutomaticCars[i]. brand,
-                                                                  power: filteredAutomaticCars[i]. power,
-                                                                  range: filteredAutomaticCars[i].range,
-                                                                  seats: filteredAutomaticCars[i].seats,
-                                                                  imgPath: filteredAutomaticCars[i].imgPath,
-                                                                  description: filteredAutomaticCars[i].description,
-                                                                  name: filteredAutomaticCars[i].name,
-                                                                  rating: filteredAutomaticCars[i].rating,
-                                                                  type: filteredAutomaticCars[i].type)));
+
+                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(car:filteredAutomaticCars[i])));
                                                             },
 
                                                             leading: Container(
@@ -246,7 +230,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                                   boxShadow:  [
                                                                     BoxShadow(
                                                                       blurRadius: 2,
-                                                                      offset: Offset(0, 2),
+                                                                      offset: const Offset(0, 2),
                                                                       color:Colors.grey.withOpacity(0.1),
                                                                     )
 
@@ -291,16 +275,8 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                         padding: const EdgeInsets.all(8.0),
                                                         child: ListTile(
                                                             onTap: (){
-                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
-                                                                  brand: filteredElectricCars[i]. brand,
-                                                                  power: filteredElectricCars[i]. power,
-                                                                  range: filteredElectricCars[i].range,
-                                                                  seats: filteredElectricCars[i].seats,
-                                                                  imgPath: filteredElectricCars[i].imgPath,
-                                                                  description: filteredElectricCars[i].description,
-                                                                  name: filteredElectricCars[i].name,
-                                                                  rating: filteredElectricCars[i].rating,
-                                                                  type: filteredElectricCars[i].type)));
+
+                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(car:filteredElectricCars[i])));
                                                             },
 
                                                             leading: Container(

@@ -11,7 +11,6 @@ import 'package:car_rent/models/car_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'dart:async';
-import 'package:cross_file_image/cross_file_image.dart';
 
 import '../utils/utils.dart';
 
@@ -62,7 +61,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
       Hive.box<Car>('car').add(Car(
           name: name, description: description,
           imgPath: image!.path,
-          brand: brand,  type: type, power: power, range:range, seats: seats, rating: rating,    ));
+          brand: brand,  type: type, power: power, range:range, seats: seats, rating: rating, ));
 
     }
     Navigator.push(

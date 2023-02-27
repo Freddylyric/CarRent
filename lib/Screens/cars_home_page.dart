@@ -144,6 +144,8 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                                                              child: ListTile(
                                                                onTap: (){
                                                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
+                                                                      car: car,)));
+                                                                /* Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
                                                                      brand: car!. brand,
                                                                      power: car!. power,
                                                                      range: car!.range,
@@ -152,7 +154,7 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                                                                      description: car!.description,
                                                                      name: car!.name,
                                                                      rating: car!.rating,
-                                                                     type: car!.type)));
+                                                                     type: car!.type)));*/
                                                                },
 
                                                                leading: Container(

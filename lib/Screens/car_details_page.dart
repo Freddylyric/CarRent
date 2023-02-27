@@ -9,9 +9,10 @@ import 'package:car_rent/utils/colors.dart' as AppColors;
 
 
 class CarDetailsPage extends StatelessWidget {
-  // const CarDetails({Key? key}) : super(key: key);
-
-  final String? name;
+   //const CarDetailsPage({Key? key}) : super(key: key);
+   Car car;
+   CarDetailsPage({super.key, required this.car});
+  /*final String? name;
   final String? description ;
   final String? imgPath;
   final  String?  power;
@@ -31,7 +32,7 @@ class CarDetailsPage extends StatelessWidget {
     @required this.name,
     @required this.rating, @required this.type,
 
-});
+});*/
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +116,7 @@ class CarDetailsPage extends StatelessWidget {
 
                           ],
                           image: DecorationImage(
-                            image: FileImage(File(imgPath.toString()),
+                            image: FileImage(File(car.imgPath.toString()),
                             // fit: BoxFit.scaleDown,
 
                           )
@@ -125,11 +126,11 @@ class CarDetailsPage extends StatelessWidget {
 
                     ),
                     const SizedBox(height: 10,),
-                    Text(name.toString(),
+                    Text(car.name.toString(),
                       style: mainHeading,
                     ),
                     const SizedBox(height: 5,),
-                    Text(brand.toString(),
+                    Text(car.brand.toString(),
                       style: subHeading,
                       // textAlign: TextAlign.left,
                     ),
@@ -138,14 +139,14 @@ class CarDetailsPage extends StatelessWidget {
                       children:  [
                         const Icon(Icons.star, size: 24, color: Color(0xFFFFC817),),
                         const SizedBox(width: 5,),
-                        Text(rating.toString(), style: subHeading)
+                        Text(car.rating.toString(), style: subHeading)
                         // Text(rating as String, style: sub Heading,),
                       ]
                     ),
 
                     const Text('Description', style: mainHeading,),
                     const SizedBox(height: 5,),
-                    Text(description .toString(), style: subHeading,),
+                    Text(car.description .toString(), style: subHeading,),
 
                     const SizedBox(height: 10,),
                     Container(
@@ -182,7 +183,7 @@ class CarDetailsPage extends StatelessWidget {
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(power.toString(), style: subHeading,),
+                                    Text(car.power.toString(), style: subHeading,),
                                   ],
                                 ),
                               ),
@@ -197,7 +198,7 @@ class CarDetailsPage extends StatelessWidget {
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(seats.toString(), style: subHeading,),
+                                    Text(car.seats.toString(), style: subHeading,),
                                   ],
                                 ),
                               ),
@@ -212,7 +213,7 @@ class CarDetailsPage extends StatelessWidget {
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(range.toString(), style: subHeading,),
+                                    Text(car.range.toString(), style: subHeading,),
                                   ],
                                 ),
                               ),
