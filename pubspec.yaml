@@ -31,6 +31,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+  cloud_firestore: ^4.4.3
+  firebase_auth: ^4.2.9
+  google_fonts: ^4.0.3
+  provider: ^6.0.5
+
 
 
 
@@ -50,6 +55,14 @@ dependencies:
   shared_preferences: ^2.0.0
   path_provider: ^2.0.2
   cross_file_image: ^1.0.0
+  firebase_core: ^2.7.0
+  firebase_analytics: ^10.1.4
+  firebase_crashlytics: ^3.0.15
+  firebase_remote_config: ^3.0.13
+  firebase_in_app_messaging: ^0.7.0+14
+  firebase_messaging: ^14.2.5
+  flutter_local_notifications: ^9.0.0
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

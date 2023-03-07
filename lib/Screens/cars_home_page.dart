@@ -9,6 +9,8 @@ import 'package:car_rent/models/car_model.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
+import '../remote_config.dart';
+
 class CarsHomePage extends StatefulWidget {
   const CarsHomePage({Key? key}) : super(key: key);
 
@@ -35,12 +37,8 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
 
 
               appBar: AppBar(
-                // leading: IconButton(
-                //   icon: const Icon(Icons.menu, color: Color(0xff302D2C)),
-                //   onPressed: () {
-                //     //  code to handle the menu button press
-                //   },
-                // ),
+
+
                 title: const Text('Home', style: mainHeading),
                 backgroundColor: AppColors.secondaryColor,
                 centerTitle: true,
@@ -54,8 +52,23 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     decoration: const BoxDecoration(color: Colors.white),
                     alignment: Alignment.centerLeft,
-                    child: Image.asset("assets/images/carLogo.png", height: 50, width: 120),
+                    child: FutureBuilder(
+                      future: FirebaseRemoteConfigClass().initializeConfig(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          return Image.network(
+                            snapshot.data,
+                            height: 50,
+                            width: 120,
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    ),
                   ),
+
+
                   Expanded(
                       child: CustomScrollView(
                           slivers: [

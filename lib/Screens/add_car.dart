@@ -81,6 +81,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         title: const Text('Add a Car',style: mainHeading),
 
 
+
         actions: [
           IconButton(
             onPressed: submitData,
@@ -187,7 +188,10 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
             ),
           ),
+
         ),
+
+
       ),
 
       floatingActionButton: FloatingActionButton(onPressed: pickImage,
