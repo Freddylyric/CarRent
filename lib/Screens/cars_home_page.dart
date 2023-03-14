@@ -289,8 +289,7 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                                                         padding: const EdgeInsets.all(8.0),
                                                         child: ListTile(
                                                             onTap: () {
-                                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => CarDetailsPage(
-                                                                car: car,)));
+                                                              _showInterstitialAd(car);
                                                             },
 
                                                             leading: Container(
