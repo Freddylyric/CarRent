@@ -9,6 +9,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:car_rent/Screens/cars_list_page.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'Screens/cars_list_page.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -32,6 +33,17 @@ Future <void> main() async {
 
 
   WidgetsFlutterBinding.ensureInitialized();
+  // Future<InitializationStatus> _initGoogleMobileAds() {
+  //   // TODO: Initialize Google Mobile Ads SDK
+  //   return MobileAds.instance.initialize();
+  // }
+  MobileAds.instance.initialize();
+
+  // RequestConfiguration requestConfiguration = RequestConfiguration(
+  //   testDeviceIds:
+  // );
+  // MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+
 
   Directory directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);

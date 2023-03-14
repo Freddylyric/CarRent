@@ -150,11 +150,6 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                     child: const Text('No results found', style: mainHeading,)):
 
 
-
-
-
-
-
                                                 ListView.builder(
                                                     itemCount: filteredCars.length,
                                                     itemBuilder: (_, i) {

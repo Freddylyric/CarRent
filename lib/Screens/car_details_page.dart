@@ -10,29 +10,17 @@ import 'package:car_rent/utils/colors.dart' as AppColors;
 
 class CarDetailsPage extends StatelessWidget {
    //const CarDetailsPage({Key? key}) : super(key: key);
+
+
    Car car;
-   CarDetailsPage({super.key, required this.car});
-  /*final String? name;
-  final String? description ;
-  final String? imgPath;
-  final  String?  power;
-  final  String? range;
-  final  String?  seats ;
-  final String? brand ;
-  final  String?  rating;
-  final String? type;
+  // final bool showInterstitialAd;
 
-  const CarDetailsPage({super.key,
-    @required this.brand,
-    @required this.power,
-    @required this.range,
-    @required this.seats,
-    @required this.imgPath,
-    @required this.description,
-    @required this.name,
-    @required this.rating, @required this.type,
+   CarDetailsPage({super.key, required this.car, /*this.showInterstitialAd = false*/});
 
-});*/
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
