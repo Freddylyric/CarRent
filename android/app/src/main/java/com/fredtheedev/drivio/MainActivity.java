@@ -1,4 +1,4 @@
-package com.example.car_rent;
+package com.fredtheedev.drivio;
 
 import io.flutter.embedding.android.FlutterActivity;
 

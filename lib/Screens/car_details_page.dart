@@ -1,26 +1,105 @@
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:car_rent/Screens/api_trial.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../models/car_model.dart';
 import '../utils/utils.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
 
 
-class CarDetailsPage extends StatelessWidget {
+class CarDetailsPage extends StatefulWidget {
    //const CarDetailsPage({Key? key}) : super(key: key);
 
 
-   Car car;
-  // final bool showInterstitialAd;
-
-   CarDetailsPage({super.key, required this.car, /*this.showInterstitialAd = false*/});
 
 
+  final Car car;
 
 
+  const CarDetailsPage({Key? key, required this.car, }) : super(key: key);
 
+
+  @override
+  _CarDetailsPageState createState() => _CarDetailsPageState();
+}
+
+class _CarDetailsPageState extends State<CarDetailsPage> {
+  InterstitialAd? _interstitialAd;
+  var interstitialAdUnit = "ca-app-pub-3940256099942544/1033173712";
+  bool _adShown = false;
+
+@override
+void initState(){
+
+  _createInterstitialAd();
+  super.initState();
+  // _showInterstitialAd(widget.car);
+}
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: interstitialAdUnit,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          _interstitialAd = ad;
+          // Show the ad as soon as it is loaded.
+          if(!_adShown) {
+            _showInterstitialAd(widget.car);
+          }
+
+        },
+        onAdFailedToLoad: (error) {
+          if (kDebugMode) {
+            print('Ad failed to load: $error');
+          }
+        },
+      ),
+    );
+  }
+  void _showInterstitialAd(Car car) async {
+      if (_interstitialAd == null) {
+        return;
+      }
+
+
+      _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          if (_adShown) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CarDetailsPage(car: widget.car),
+              ),
+            );
+          } else {
+            setState(() {
+              _adShown = true;
+            });
+          }
+
+          // _createInterstitialAd();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          if (kDebugMode) {
+            print('$ad onAdFailedToShowFullScreenContent: $error');
+          }
+          // _createInterstitialAd();
+        },
+      );
+
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    }
+
+    @override
+    void dispose() {
+      _interstitialAd?.dispose();
+      super.dispose();
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +183,7 @@ class CarDetailsPage extends StatelessWidget {
 
                           ],
                           image: DecorationImage(
-                            image: FileImage(File(car.imgPath.toString()),
+                            image: FileImage(File(widget.car.imgPath.toString()),
                             // fit: BoxFit.scaleDown,
 
                           )
@@ -114,11 +193,11 @@ class CarDetailsPage extends StatelessWidget {
 
                     ),
                     const SizedBox(height: 10,),
-                    Text(car.name.toString(),
+                    Text(widget.car.name.toString(),
                       style: mainHeading,
                     ),
                     const SizedBox(height: 5,),
-                    Text(car.brand.toString(),
+                    Text(widget.car.brand.toString(),
                       style: subHeading,
                       // textAlign: TextAlign.left,
                     ),
@@ -127,14 +206,14 @@ class CarDetailsPage extends StatelessWidget {
                       children:  [
                         const Icon(Icons.star, size: 24, color: Color(0xFFFFC817),),
                         const SizedBox(width: 5,),
-                        Text(car.rating.toString(), style: subHeading)
+                        Text(widget.car.rating.toString(), style: subHeading)
                         // Text(rating as String, style: sub Heading,),
                       ]
                     ),
 
                     const Text('Description', style: mainHeading,),
                     const SizedBox(height: 5,),
-                    Text(car.description .toString(), style: subHeading,),
+                    Text(widget.car.description .toString(), style: subHeading,),
 
                     const SizedBox(height: 10,),
                     Container(
@@ -171,7 +250,7 @@ class CarDetailsPage extends StatelessWidget {
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(car.power.toString(), style: subHeading,),
+                                    Text(widget.car.power.toString(), style: subHeading,),
                                   ],
                                 ),
                               ),
@@ -186,7 +265,7 @@ class CarDetailsPage extends StatelessWidget {
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(car.seats.toString(), style: subHeading,),
+                                    Text(widget.car.seats.toString(), style: subHeading,),
                                   ],
                                 ),
                               ),
@@ -201,7 +280,7 @@ class CarDetailsPage extends StatelessWidget {
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(car.range.toString(), style: subHeading,),
+                                    Text(widget.car.range.toString(), style: subHeading,),
                                   ],
                                 ),
                               ),
@@ -249,6 +328,7 @@ class CarDetailsPage extends StatelessWidget {
           child: OutlinedButton(
 
             onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const CarData()));
               // handle the button press here
             },
             child: const Text(

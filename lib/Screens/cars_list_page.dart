@@ -71,7 +71,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     decoration: const BoxDecoration(color: Colors.white),
                     alignment: Alignment.centerLeft,
-                    child: Image.asset("assets/images/carLogo.png", height: 50, width: 120),
+                    child: Image.asset("assets/images/steering-wheel-red.png", height: 50, width: 120),
                   ),
 
 

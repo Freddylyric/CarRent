@@ -29,6 +29,57 @@
             {
               "client_id": "941174927282-go5u9qdithl4kv02j352fq8v4fsvg27o.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "941174927282-1iqs9q1nejnarbfm7sdnufq8omgp3bh5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.carRent"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941174927282:android:b031718fa1d3a9d9f1feab",
+        "android_client_info": {
+          "package_name": "com.fredtheedev.drivio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "941174927282-rg7bgflcu7uerhr77hddpad8v1d1jumd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fredtheedev.drivio",
+            "certificate_hash": "0bd94267b87daf348f01ad92e4ea4a65c1c2b715"
+          }
+        },
+        {
+          "client_id": "941174927282-go5u9qdithl4kv02j352fq8v4fsvg27o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbDIvn_e8CPsxGAehnJPboPH6yoXfpJsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "941174927282-go5u9qdithl4kv02j352fq8v4fsvg27o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "941174927282-1iqs9q1nejnarbfm7sdnufq8omgp3bh5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.carRent"
+              }
             }
           ]
         }

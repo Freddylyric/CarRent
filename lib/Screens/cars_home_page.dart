@@ -31,16 +31,16 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
 
   var adUnit2 = "ca-app-pub-3940256099942544/6300978111";
 
-  var interstitialAdUnit = "ca-app-pub-3940256099942544/1033173712";
-
-  InterstitialAd? _interstitialAd;
+  // var interstitialAdUnit = "ca-app-pub-3940256099942544/1033173712";
+  //
+  // InterstitialAd? _interstitialAd;
 
   @override
   void initState() {
     super.initState();
     bannerAdFuture = initBannerAd();
 
-    _createInterstitialAd();
+    // _createInterstitialAd();
 
     _tabController = TabController(length: 3, vsync: this);
 
@@ -94,56 +94,84 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
 
 
 
-  void _createInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: interstitialAdUnit,
-      request: const AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (ad) {
-          _interstitialAd = ad;
-        },
-        onAdFailedToLoad: (error) {
-          if (kDebugMode) {
-            print('Ad failed to load: $error');
-          }
-        },
-      ),
-    );
-  }
+  // void _createInterstitialAd() {
+  //   InterstitialAd.load(
+  //     adUnitId: interstitialAdUnit,
+  //     request: const AdRequest(),
+  //     adLoadCallback: InterstitialAdLoadCallback(
+  //       onAdLoaded: (ad) {
+  //         _interstitialAd = ad;
+  //       },
+  //       onAdFailedToLoad: (error) {
+  //         if (kDebugMode) {
+  //           print('Ad failed to load: $error');
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
+  //
+  // void _showInterstitialAd(Car car) {
+  //   if (_interstitialAd == null) {
+  //     return;
+  //   }
+  //
+  //   _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+  //     onAdDismissedFullScreenContent: (ad) {
+  //       Navigator.of(context).push(
+  //         MaterialPageRoute(
+  //           builder: (ctx) => CarDetailsPage(car: car),
+  //         ),
+  //       );
+  //       _createInterstitialAd();
+  //     },
+  //     onAdFailedToShowFullScreenContent: (ad, error) {
+  //       if (kDebugMode) {
+  //         print('$ad onAdFailedToShowFullScreenContent: $error');
+  //       }
+  //       _createInterstitialAd();
+  //     },
+  //   );
+  //
+  //   // Show the ad immediately
+  //   _interstitialAd!.show();
+  //   _interstitialAd = null;
+  // }
+  //
 
 
-  void _showInterstitialAd(Car car) {
-    if (_interstitialAd == null) {
-      return;
-    }
-
-
-    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (ad) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx) => CarDetailsPage(car: car),
-          ),
-        );
-        _createInterstitialAd();
-      },
-      onAdFailedToShowFullScreenContent: (ad, error) {
-        if (kDebugMode) {
-          print('$ad onAdFailedToShowFullScreenContent: $error');
-        }
-        _createInterstitialAd();
-      },
-    );
-
-    _interstitialAd!.show();
-    _interstitialAd = null;
-  }
-
-  @override
-  void dispose() {
-    _interstitialAd?.dispose();
-    super.dispose();
-  }
+  // void _showInterstitialAd(Car car) {
+  //   if (_interstitialAd == null) {
+  //     return;
+  //   }
+  //
+  //
+  //   _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+  //     onAdDismissedFullScreenContent: (ad) {
+  //       Navigator.of(context).push(
+  //         MaterialPageRoute(
+  //           builder: (ctx) => CarDetailsPage(car: car),
+  //         ),
+  //       );
+  //       _createInterstitialAd();
+  //     },
+  //     onAdFailedToShowFullScreenContent: (ad, error) {
+  //       if (kDebugMode) {
+  //         print('$ad onAdFailedToShowFullScreenContent: $error');
+  //       }
+  //       _createInterstitialAd();
+  //     },
+  //   );
+  //
+  //   _interstitialAd!.show();
+  //   _interstitialAd = null;
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   _interstitialAd?.dispose();
+  //   super.dispose();
+  // }
 
 
 
@@ -180,20 +208,21 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   decoration: const BoxDecoration(color: Colors.white),
                   alignment: Alignment.centerLeft,
-                  child: FutureBuilder(
-                    future: FirebaseRemoteConfigClass().initializeConfig(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.hasData) {
-                        return Image.network(
-                          snapshot.data,
-                          height: 50,
-                          width: 120,
-                        );
-                      } else {
-                        return const CircularProgressIndicator();
-                      }
-                    },
-                  ),
+                  child: Image.asset("assets/images/steering-wheel-red.png", height: 50, width: 120),
+                  // child: FutureBuilder(
+                  //   future: FirebaseRemoteConfigClass().initializeConfig(),
+                  //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  //     if (snapshot.hasData) {
+                  //       return Image.network(
+                  //         snapshot.data,
+                  //         height: 50,
+                  //         width: 120,
+                  //       );
+                  //     } else {
+                  //       return Image.asset("assets/images/drivioLogo.png", height: 50, width: 120);
+                  //     }
+                  //   },
+                  // ),
                 ),
 
 
@@ -289,7 +318,11 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                                                         padding: const EdgeInsets.all(8.0),
                                                         child: ListTile(
                                                             onTap: () {
-                                                              _showInterstitialAd(car);
+                                                              Navigator.of(context).push(
+                                                                MaterialPageRoute(
+                                                                  builder: (ctx) => CarDetailsPage(car: car),
+                                                                ),
+                                                              );
                                                             },
 
                                                             leading: Container(
