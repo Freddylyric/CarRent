@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:car_rent/Screens/login/sign_up.dart';
+import 'package:car_rent/Screens/login/splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:car_rent/Screens/nav_page.dart';
@@ -16,6 +18,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'Screens/login/login_screen.dart';
 import 'firebase_options.dart';
 import 'models/car_model.dart';
 
@@ -111,13 +114,17 @@ class MyApp extends StatelessWidget{
       routes:{
         // '/': (context) => const (),
         '/cars/automatic': (context) => const CarsListPage(),
-        '/cars/electric': (context) => const CarsListPage(),},
+        '/cars/electric': (context) => const CarsListPage(),
+        '/login_screen' : (context) => const LoginScreen(),
+        '/sign_up': (context) => const SignUpScreen(),
+      },
+
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primaryColor: Colors.white,
           accentColor: Colors.blue
       ),
-      home: const NavPage(),
+      home: const SplashScreen(),
     );
   }
 }
