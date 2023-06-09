@@ -58,7 +58,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                 //     //  code to handle the menu button press
                 //   },
                 // ),
-                title: const Text('Cars List', style: mainHeading),
+                title:  Text('Cars List', style: mainHeading),
                 backgroundColor: AppColors.secondaryColor,
                 centerTitle: true,
                 elevation: 0,
@@ -70,8 +70,8 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     decoration: const BoxDecoration(color: Colors.white),
-                    alignment: Alignment.centerLeft,
-                    child: Image.asset("assets/images/steering-wheel-red.png", height: 50, width: 120),
+                    alignment: Alignment.center,
+                    child: Image.asset("assets/images/drLogo.png", height: 50, width: 120),
                   ),
 
 
@@ -147,7 +147,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                               children:  [
                                                 _textEditingController!.text.isNotEmpty && carsOnSearch.isEmpty ?  Container(
                                                   padding: const EdgeInsets.all( 10),
-                                                    child: const Text('No results found', style: mainHeading,)):
+                                                    child:  Text('No results found', style: mainHeading,)):
 
 
                                                 ListView.builder(
@@ -204,7 +204,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
 
                                                 _textEditingController!.text.isNotEmpty && carsOnSearch.isEmpty ?  Container(
                                                     padding: const EdgeInsets.all( 10),
-                                                    child: const Text('No results found', style: mainHeading,)):
+                                                    child:  Text('No results found', style: mainHeading,)):
                                                 ListView.builder(
                                                     itemCount: filteredAutomaticCars.length,
                                                     itemBuilder: (_, i) {
@@ -258,7 +258,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
 
                                                 _textEditingController!.text.isNotEmpty && carsOnSearch.isEmpty ?  Container(
                                                     padding: const EdgeInsets.all( 10),
-                                                    child: const Text('No results found', style: mainHeading,)):
+                                                    child:  Text('No results found', style: mainHeading,)):
 
 
                                                 ListView.builder(

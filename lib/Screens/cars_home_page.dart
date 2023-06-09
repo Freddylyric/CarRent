@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:car_rent/Screens/login/authentication_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:car_rent/Screens/car_details_page.dart';
@@ -22,6 +23,7 @@ class CarsHomePage extends StatefulWidget {
 
 class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderStateMixin {
 
+  late String _selectedOption;
   late TabController _tabController;
   late Future<void> bannerAdFuture;
   late BannerAd bannerAd, bannerAd2;
@@ -185,12 +187,73 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
 
 
       appBar: AppBar(
-
-
-        title: const Text('Home', style: mainHeading),
+        title:  Text('Home', style: mainHeading),
         backgroundColor: AppColors.secondaryColor,
         centerTitle: true,
         elevation: 0,
+        actions: [
+          PopupMenuButton(
+            // color: styles.backgroundColor,
+            icon: Icon(Icons.menu,size: 36, color: AppColors.accentColor,),
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(
+                value: 'profile',
+                child: Row(
+                  children: [
+                    Icon(Icons.person, color: AppColors.primaryColor,),
+                    SizedBox(width: 10),
+                    Text('Profile', style: bodyText),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'privacy',
+                child: Row(
+                  children: [
+                    Icon(Icons.privacy_tip, color: AppColors.primaryColor,),
+                    SizedBox(width: 10),
+                    Text('Privacy Policy', style: bodyText),
+
+                  ],
+                ),
+
+              ),
+
+              PopupMenuItem(
+                value: 'logout',
+                child: Column(
+                  children: [
+                    // SizedBox(height: 10,),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                    ), const SizedBox(height: 5,),
+                    Row(
+                      children: [
+                        Icon(Icons.close, color: AppColors.primaryColor,),
+                        const SizedBox(width: 10),
+                         Text('Logout', style: bodyText,),
+                      ],
+                    ),
+                    const SizedBox(height: 5,),
+                  ],
+                ),
+              ),
+            ],
+            onSelected: (value) {
+              setState(() {
+                _selectedOption = value;
+              });
+
+              // Add menu option handling
+              if (value == 'logout') {
+                // Perform logout actions here
+                AuthenticationFunctions.instance.signOut();
+              }
+            },
+          ),
+        ],
+
       ),
       body: SafeArea(
 
@@ -207,8 +270,8 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   decoration: const BoxDecoration(color: Colors.white),
-                  alignment: Alignment.centerLeft,
-                  child: Image.asset("assets/images/steering-wheel-red.png", height: 50, width: 120),
+                  alignment: Alignment.center,
+                  child: Image.asset("assets/images/drLogo.png", height: 50, width: 120),
                   // child: FutureBuilder(
                   //   future: FirebaseRemoteConfigClass().initializeConfig(),
                   //   builder: (BuildContext context, AsyncSnapshot snapshot) {

@@ -1,6 +1,9 @@
+import 'package:car_rent/Screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:car_rent/utils/utils.dart';
 import 'package:car_rent/utils/colors.dart' as app_colors;
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,9 +20,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _loadScreen() async {
-    await Future.delayed(Duration(seconds: 10)); // add a delay of 3 seconds
+    await Future.delayed(Duration(seconds: 5)); // add a delay of 3 seconds
 
-    Navigator.pushNamed(context, '/login_screen');
+    Get.to(
+      () => LoginScreen(),
+    );
   }
 
   @override

@@ -1,18 +1,43 @@
 
 import 'package:car_rent/utils/colors.dart' as AppColors;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-const mainHeading = TextStyle(
-    fontFamily: 'Poppins',
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    height: 24 / 16,
-    letterSpacing: 1,
-    color: Color(0xff302D2C),
+// const mainHeading = TextStyle(
+//     fontFamily: 'Poppins',
+//     fontSize: 16,
+//     fontWeight: FontWeight.w500,
+//     height: 24 / 16,
+//     letterSpacing: 1,
+//     color: Color(0xff302D2C),
+// );
+
+ final mainHeading = GoogleFonts.poppins(
+  fontSize: 16,
+  fontWeight: FontWeight.w500,
+  height: 24 / 16,
+  letterSpacing: 1,
+  color: Color(0xff302D2C),
 );
 
-const subHeading = TextStyle(
-    fontFamily: 'Poppins',
+final whiteHeading = GoogleFonts.poppins(
+  fontSize: 16,
+  fontWeight: FontWeight.w500,
+  height: 24 / 16,
+  letterSpacing: 1,
+  color: Colors.white,
+);
+
+final bigHeading = GoogleFonts.poppins(
+  fontSize: 35,
+  fontWeight: FontWeight.w500,
+  height: 24 / 16,
+  letterSpacing: 1,
+  color: Color(0xff302D2C),
+);
+
+final subHeading = GoogleFonts.poppins(
+
     fontSize: 12,
     fontWeight: FontWeight.w500,
     height: 18 / 12,
@@ -20,8 +45,7 @@ const subHeading = TextStyle(
     color: Color(0xff8F8B8A),
 
 );
-const bodyText = TextStyle(
-  fontFamily: 'Poppins',
+final bodyText = GoogleFonts.poppins(
   fontSize: 12,
   fontWeight: FontWeight.w400,
   height: 18 / 12,
@@ -32,7 +56,7 @@ const bodyText = TextStyle(
 
 
 const String appLogo = "assets/images/drLogo.png";
-
+const String password = "assets/images/password.png";
 
 class ButtonStyleConstants {
 
@@ -48,6 +72,15 @@ class ButtonStyleConstants {
 
   static final ButtonStyle primaryButtonStyle = ElevatedButton.styleFrom(
     backgroundColor: primaryColor,
+    padding: buttonPadding,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(borderRadius),
+    ),
+    minimumSize: const Size(buttonWidth, buttonHeight),
+  );
+
+  static final ButtonStyle blackButtonStyle = ElevatedButton.styleFrom(
+    backgroundColor: Colors.black,
     padding: buttonPadding,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(borderRadius),

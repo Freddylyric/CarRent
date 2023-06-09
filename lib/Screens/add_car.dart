@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:car_rent/Screens/cars_home_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 
 import '../utils/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 
 
@@ -26,6 +29,7 @@ class AddCarScreen extends StatefulWidget {
 class _AddCarScreenState extends State<AddCarScreen> {
 
   final _formKey = GlobalKey<FormState>();
+  late String _uniqueFileName= "";
 
   File? image;
   String? name;
@@ -37,12 +41,18 @@ class _AddCarScreenState extends State<AddCarScreen> {
   String? type;
   String? rating;
 
+
   Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
 
       final imageTemporary = File(image.path);
+      print(image.path);
+
+      //create unique name for image using timestamp
+     _uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
+
       setState(() {
         this.image = imageTemporary;
       });
@@ -63,6 +73,62 @@ class _AddCarScreenState extends State<AddCarScreen> {
           imgPath: image!.path,
           brand: brand,  type: type, power: power, range:range, seats: seats, rating: rating, ));
 
+
+        // Create a new document reference in the "cars" collection
+        final carRef = FirebaseFirestore.instance.collection('cars').doc();
+
+
+        // Create a map of car data
+        final carData = {
+          'name': name,
+          'description': description,
+          'brand': brand,
+          'power': power,
+          'range': range,
+          'seats': seats,
+          'type': type,
+          'rating': rating,
+        };
+
+        // Save the car data to Firestore
+        await carRef.set(carData);
+
+        // Upload the image file to Firebase Storage
+        if (image != null) {
+
+          // get a reference to storage root
+          Reference referenceRoot = FirebaseStorage.instance.ref();
+          Reference referenceDirImages = referenceRoot.child('images');
+
+          //create a reference for the image to be stored
+          Reference referenceImageToUpload = referenceDirImages.child(_uniqueFileName);
+
+          try {
+            await referenceImageToUpload.putFile(File(image!.path));
+            final imageUrl= await referenceImageToUpload.getDownloadURL();
+            carRef.update({'image_url': imageUrl});
+            print("image stored");
+
+          }catch(error){
+
+          }
+          // store teimage file
+
+
+
+
+
+
+
+          // final storageRef =
+          // FirebaseStorage.instance.ref().child('car_images/${carRef.id}');
+          // final uploadTask = storageRef.putFile(image!);
+          // await uploadTask.whenComplete(() {});
+          //
+          // final imageUrl = await storageRef.getDownloadURL();
+          // carRef.update({'image_url': imageUrl});
+        }
+
     }
     Navigator.push(
       context,
@@ -78,7 +144,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         backgroundColor: AppColors.secondaryColor,
         centerTitle: true,
         elevation: 0,
-        title: const Text('Add a Car',style: mainHeading),
+        title:  Text('Add a Car',style: mainHeading),
 
 
 

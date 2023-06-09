@@ -11,6 +11,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:car_rent/Screens/cars_list_page.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'Screens/cars_list_page.dart';
 import 'package:hive/hive.dart';
@@ -18,6 +20,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'Screens/login/authentication_functions.dart';
 import 'Screens/login/login_screen.dart';
 import 'firebase_options.dart';
 import 'models/car_model.dart';
@@ -55,7 +58,9 @@ Future <void> main() async {
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
+  ). then((value) => Get.put(AuthenticationFunctions()));
+
+
   await FirebaseMessaging.instance.getInitialMessage();
 
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -100,23 +105,30 @@ Future <void> main() async {
     }
   });
 
+  // runApp(GetMaterialApp(
+  //  debugShowCheckedModeBanner: false,
+  //   home: MyApp(),
+  // ));
+
   runApp( const MyApp());
+
 }
 
 class MyApp extends StatelessWidget{
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context){
-    return  MaterialApp(
+
+    return  GetMaterialApp(
       title: 'carRent',
-      initialRoute: '/',
+      // initialRoute: '/',
       routes:{
-        // '/': (context) => const (),
+        // '/': (context) =>  const SplashScreen(),
         '/cars/automatic': (context) => const CarsListPage(),
         '/cars/electric': (context) => const CarsListPage(),
-        '/login_screen' : (context) => const LoginScreen(),
-        '/sign_up': (context) => const SignUpScreen(),
+        '/login_screen' : (context) =>  LoginScreen(),
+        '/sign_up': (context) =>  SignUpScreen(),
       },
 
       debugShowCheckedModeBanner: false,

@@ -110,7 +110,7 @@ void initState(){
 
     appBar: AppBar(
 
-      title: const Text('Car Details', style: mainHeading,),
+      title:  Text('Car Details', style: mainHeading,),
       centerTitle: true,
       leading: const BackButton(
         color: Color(0xff302D2C),
@@ -129,7 +129,7 @@ void initState(){
           children:  [
 
             const SizedBox(height: 10,),
-            const Padding(
+             Padding(
               padding: EdgeInsets.only(left: 13),
               child: Text('All the good stuff',
                 style: mainHeading,
@@ -138,7 +138,7 @@ void initState(){
               ),
             ),
             const SizedBox(height: 5, ),
-            const Padding(
+             Padding(
               padding: EdgeInsets.only(left: 13),
               child: Text('Everything you need to know',
                 style: subHeading,
@@ -211,7 +211,7 @@ void initState(){
                       ]
                     ),
 
-                    const Text('Description', style: mainHeading,),
+                     Text('Description', style: mainHeading,),
                     const SizedBox(height: 5,),
                     Text(widget.car.description .toString(), style: subHeading,),
 
@@ -245,7 +245,7 @@ void initState(){
 
                                   children: [
 
-                                    const Text(
+                                     Text(
                                       "Power",
                                       style: mainHeading,
                                     ),
@@ -260,7 +260,7 @@ void initState(){
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children:  [
-                                    const Text(
+                                     Text(
                                       "Seats",
                                       style: mainHeading,
                                     ),
@@ -275,7 +275,7 @@ void initState(){
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children:  [
-                                    const Text(
+                                     Text(
                                       "Range",
                                       style: mainHeading,
                                     ),

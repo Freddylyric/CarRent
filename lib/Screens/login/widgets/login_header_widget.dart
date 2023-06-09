@@ -17,7 +17,7 @@ class LoginHeaderWidget extends StatelessWidget {
       children: [
         SizedBox(height: 30,),
         Image(image: AssetImage(appLogo), height: size.height*0.2,),
-        Text("Welcome Back,",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
+        Text("Welcome Back,",style: bigHeading),
         SizedBox(height: 10,),
         Text("Let's get you a ride.", style: mainHeading,),
       ],
