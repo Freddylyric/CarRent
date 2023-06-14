@@ -1,5 +1,7 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel{
   final String? id;
   final String name;
@@ -8,7 +10,7 @@ class UserModel{
   final String password;
   final String? imageUrl;
   final String? role;
-  final String? createdAt;
+  final DateTime createdAt;
 
   const UserModel({
     this.id,
@@ -31,10 +33,29 @@ class UserModel{
       'password': password,
       'imageUrl': imageUrl,
       'role': role,
-      'createdAt': createdAt,
+      'createdAt': createdAt.toIso8601String(),
 
     };
   }
+
+
+  // map user fetched data
+
+  factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document){
+    final data = document.data()!;
+    return UserModel(
+      id: document.id,
+      email: data["email"],
+      name: data["name"],
+      phoneNumber: data["phoneNumber"],
+      password: data["password"],
+      imageUrl: data["imageUrl"],
+      role: data["role"],
+      createdAt: data["createdAt"],
+
+    );
+  }
+
 
 }
 

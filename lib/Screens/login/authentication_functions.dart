@@ -12,7 +12,7 @@ class AuthenticationFunctions extends GetxController{
 
 
   final _auth = FirebaseAuth.instance;
-  //changes (convert to string using getX)
+  //changes (convert to stream using getX)
   late final Rx<User?> firebaseUser;
 //redirect already logged in users
 
@@ -24,17 +24,16 @@ class AuthenticationFunctions extends GetxController{
 
     //give user stream to fetch any firebase changes
     firebaseUser.bindStream(_auth.userChanges());
+    //FlutterNativeSplash.remove();
     ever(firebaseUser, _setInitialScreen);
 
 
 
   }
-  _setInitialScreen(User? user) {
-    if (user == null) {
-      Get.offAll(() => LoginScreen());
-    } else {
-      Get.offAll(() => const NavPage());
-    }
+
+
+  _setInitialScreen(User? user){
+    user == null ? Get.offAll(() => LoginScreen()) :  Get.offAll(() => const NavPage());
   }
 
 

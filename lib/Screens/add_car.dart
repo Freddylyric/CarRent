@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:car_rent/Screens/cars_home_page.dart';
+import 'package:car_rent/Screens/nav_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +133,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     }
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CarsHomePage()),
+      MaterialPageRoute(builder: (context) => const NavPage()),
     );
   }
 

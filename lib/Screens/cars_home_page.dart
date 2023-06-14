@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:car_rent/Screens/login/authentication_functions.dart';
+import 'package:car_rent/Screens/profile_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:car_rent/Screens/car_details_page.dart';
@@ -8,6 +9,8 @@ import 'package:car_rent/utils/colors.dart' as AppColors;
 import 'package:car_rent/utils/tabs.dart';
 import 'package:car_rent/utils/utils.dart';
 import 'package:car_rent/models/car_model.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -249,6 +252,10 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
               if (value == 'logout') {
                 // Perform logout actions here
                 AuthenticationFunctions.instance.signOut();
+              }
+              if (value == 'profile') {
+                // Perform logout actions here
+                Get.to((() => ProfileScreen()));
               }
             },
           ),

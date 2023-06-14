@@ -13,10 +13,20 @@ import 'forget_password_mail.dart';
 import 'widgets/login_form_widget.dart';
 import 'package:get/get.dart';
 
-class LoginScreen extends StatelessWidget {
-  final controller = Get.put(SigninController());
-  final _formKey = GlobalKey<FormState>();
+class LoginScreen extends StatefulWidget {
+
   LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final controller = Get.put(SigninController());
+
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+  bool _obscurePin = true;
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +61,20 @@ class LoginScreen extends StatelessWidget {
 
 
                                         )
-                                    )
+                                    ),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please enter your email';
+
+                                      }
+                                      return null;
+                                    }
                                 ),
 
                                 SizedBox(height: 20,),
                                 TextFormField(
                                     controller: controller.password,
+                                    obscureText: _obscurePin,
                                     decoration: InputDecoration(
                                       labelText: 'Password',
                                       prefixIcon: Icon(Icons.lock),
@@ -66,12 +84,23 @@ class LoginScreen extends StatelessWidget {
 
                                       ),
                                       suffixIcon: IconButton(
-                                        onPressed: null,
-                                        //todo: add functionality to show/hide password
-                                        icon: Icon(Icons.remove_red_eye),
-
+                                        icon: Icon(
+                                          _obscurePin ? Icons.visibility_off : Icons.visibility,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscurePin = !_obscurePin;
+                                          });
+                                        },
                                       ),
-                                    )
+                                    ),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please enter your password';
+                                      }
+                                      return null;
+                                    }
                                 ),
                                 SizedBox(height: 5,),
                                 Align(
@@ -87,11 +116,19 @@ class LoginScreen extends StatelessWidget {
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(onPressed: (){
+
+                                    setState(() {
+                                      _isLoading = true;
+                                    });
                                     //todo: add functionality to login
                                     if(_formKey.currentState!.validate()){
                                       SigninController.instance.loginUser(controller.email.text.trim(), controller.password.text.trim());
+
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
                                     }
-                                  }, child:  Text("LOGIN", style: whiteHeading,),
+                                  },  child:_isLoading ? const CircularProgressIndicator():  Text("LOGIN", style: whiteHeading,),
                                       style: ButtonStyleConstants.primaryButtonStyle),
                                 ),
                               ]

@@ -31,4 +31,25 @@ class UserFunctions extends GetxController{
     );
   }
 
+
+  //Fetch user data
+
+  //single record
+  Future<UserModel> getUserDetails(String email) async {
+
+    final snapshot = await _db.collection("users").where("email", isEqualTo: email).get();
+    final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).single;
+    return  userData;
+
+  }
+
+// all records
+  Future<List<UserModel>> getAllUserDetails() async {
+
+    final snapshot = await _db.collection("users").get();
+    final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList();
+    return  userData;
+
+  }
+
 }

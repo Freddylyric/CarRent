@@ -39,6 +39,10 @@ Future <void> main() async {
 
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  ). then((value) => Get.put(AuthenticationFunctions()));
   // Future<InitializationStatus> _initGoogleMobileAds() {
   //   // TODO: Initialize Google Mobile Ads SDK
   //   return MobileAds.instance.initialize();
@@ -56,9 +60,7 @@ Future <void> main() async {
   Hive.registerAdapter<Car>(CarAdapter());
   await Hive.openBox <Car>('car');
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  ). then((value) => Get.put(AuthenticationFunctions()));
+
 
 
   await FirebaseMessaging.instance.getInitialMessage();
@@ -123,13 +125,13 @@ class MyApp extends StatelessWidget{
     return  GetMaterialApp(
       title: 'carRent',
       // initialRoute: '/',
-      routes:{
-        // '/': (context) =>  const SplashScreen(),
-        '/cars/automatic': (context) => const CarsListPage(),
-        '/cars/electric': (context) => const CarsListPage(),
-        '/login_screen' : (context) =>  LoginScreen(),
-        '/sign_up': (context) =>  SignUpScreen(),
-      },
+      // routes:{
+      //   // '/': (context) =>  const SplashScreen(),
+      //   '/cars/automatic': (context) => const CarsListPage(),
+      //   '/cars/electric': (context) => const CarsListPage(),
+      //   '/login_screen' : (context) =>  LoginScreen(),
+      //   '/sign_up': (context) =>  SignUpScreen(),
+      // },
 
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
