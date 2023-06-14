@@ -7,6 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:car_rent/models/car_model.dart';
@@ -17,6 +19,9 @@ import 'dart:async';
 import '../utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import 'login/authentication_functions.dart';
+import 'login/user_functions.dart';
 
 
 
@@ -41,6 +46,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   String?  seats;
   String? type;
   String? rating;
+ late String? _email ="";
 
 
   Future pickImage() async {
@@ -65,7 +71,23 @@ class _AddCarScreenState extends State<AddCarScreen> {
     }
 
   }
+
+  verifyUser() {
+    final _authFunctions = Get.put(AuthenticationFunctions());
+    final _userFunctions = Get.put(UserFunctions());
+
+     _email = _authFunctions.firebaseUser.value?.email;
+    if (_email != null) {
+      // return  _userFunctions.getUserDetails(email);
+      submitData();
+    } else {
+      Get.snackbar("Error", "Login and Verify your Email to proceed");
+    }
+  }
+
   submitData() async{
+
+
 
     final isValid = _formKey.currentState!.validate();
     if(isValid){
@@ -89,6 +111,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           'seats': seats,
           'type': type,
           'rating': rating,
+          'ownerEmail': _email,
         };
 
         // Save the car data to Firestore
@@ -138,6 +161,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,7 +176,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
         actions: [
           IconButton(
-            onPressed: submitData,
+            onPressed: verifyUser,
             icon: const Icon(Icons.save, color: Colors.red),
           )
         ],

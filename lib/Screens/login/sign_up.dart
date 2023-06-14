@@ -275,6 +275,7 @@ class SignUpController extends GetxController {
 
   Future<void> createUser (UserModel user) async {
     await userFunctions.createUser(user);
+    SignUpController.instance.registerUser(user.email.trim(), user.password.trim());
   }
 }
 

@@ -16,6 +16,8 @@ class UserFunctions extends GetxController{
     await _db.collection("users").add(user.toJson()).whenComplete(
           () => Get.snackbar("Success", "Your account has been created",
 
+
+
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green,
         colorText: Colors.white,),

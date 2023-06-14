@@ -33,6 +33,9 @@ class Car {
   @HiveField(8)
   String? type;
 
+  @HiveField(9)
+  String? ownerEmail;
+
   Car({
     @required this.name,
     @required this.description,
@@ -43,6 +46,7 @@ class Car {
     @required this.brand,
     @required this.rating,
     @required this.type,
+    @required this.ownerEmail,
   });
 }
 

@@ -41,20 +41,22 @@ class UserModel{
 
   // map user fetched data
 
-  factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document){
+  factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
+    final createdAt = DateTime.parse(data['createdAt']);
+
     return UserModel(
       id: document.id,
-      email: data["email"],
-      name: data["name"],
-      phoneNumber: data["phoneNumber"],
-      password: data["password"],
-      imageUrl: data["imageUrl"],
-      role: data["role"],
-      createdAt: data["createdAt"],
-
+      email: data['email'],
+      name: data['name'],
+      phoneNumber: data['phoneNumber'],
+      password: data['password'],
+      imageUrl: data['imageUrl'],
+      role: data['role'],
+      createdAt: createdAt,
     );
   }
+
 
 
 }
