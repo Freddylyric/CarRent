@@ -125,13 +125,13 @@ class MyApp extends StatelessWidget{
     return  GetMaterialApp(
       title: 'carRent',
       // initialRoute: '/',
-      // routes:{
-      //   // '/': (context) =>  const SplashScreen(),
-      //   '/cars/automatic': (context) => const CarsListPage(),
-      //   '/cars/electric': (context) => const CarsListPage(),
-      //   '/login_screen' : (context) =>  LoginScreen(),
-      //   '/sign_up': (context) =>  SignUpScreen(),
-      // },
+      routes:{
+        // '/': (context) =>  const SplashScreen(),
+        '/cars/automatic': (context) => const CarsListPage(),
+        '/cars/electric': (context) => const CarsListPage(),
+        '/login_screen' : (context) =>  LoginScreen(),
+        '/sign_up': (context) =>  SignUpScreen(),
+      },
 
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

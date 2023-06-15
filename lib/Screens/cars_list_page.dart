@@ -8,7 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:car_rent/models/car_model.dart';
 import 'package:car_rent/Screens/cars_home_page.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:hive/hive.dart';
+
+import 'login/user_functions.dart';
 
 
 class CarsListPage extends StatefulWidget {
@@ -22,6 +26,8 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
   late TabController _tabController;
    TextEditingController? _textEditingController = TextEditingController();
    List <Car> carsOnSearch=[];
+   late List<Car> _allCars= [];
+  final _carFunctions = Get.put(CarFunctions());
 
 
 
@@ -30,17 +36,32 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-
-
-
+    getAllCarsDetails();
   }
+
+
+
+  Future<void> getAllCarsDetails() async {
+    try {
+      final allCars = await _carFunctions.getAllCarDetails();
+      setState(() {
+        _allCars = allCars;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CarsController());
 
-    final box = Hive.box<Car>('car');
-    final List<Car> allCars = box.values.toList();
-    final filteredCars = _textEditingController!.text.isNotEmpty ? carsOnSearch :allCars;
+
+    // final box = Hive.box<Car>('car');
+    // final List<Car> allCars = box.values.toList();
+    final filteredCars = _textEditingController!.text.isNotEmpty ? carsOnSearch :_allCars;
     final filteredAutomaticCars = filteredCars.where((car) => car.type == 'Automatic').toList();
     final filteredElectricCars = filteredCars.where((car) => car.type == 'Electric').toList();
     return Container(
@@ -63,9 +84,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                 centerTitle: true,
                 elevation: 0,
               ),
-              body:
-
-              Column(
+              body:  Column(
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 2),
@@ -83,7 +102,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                       onChanged: (value){
                         setState(() {
 
-                          carsOnSearch = allCars.where((car) => car.name?.toLowerCase().contains(value.toLowerCase()) ?? false).toList();
+                          carsOnSearch = _allCars.where((car) => car.name?.toLowerCase().contains(value.toLowerCase()) ?? false).toList();
 
                         });
                       },
@@ -175,7 +194,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
 
                                                                   ],
                                                                   image: DecorationImage(
-                                                                    image: FileImage(File(filteredCars[i].imgPath.toString()),),
+                                                                    image: NetworkImage(filteredCars[i].imgPath.toString()?? '',),
                                                                     fit: BoxFit.scaleDown,
 
                                                                   )
@@ -189,7 +208,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
 
                                                             trailing: IconButton(
                                                               onPressed: (){
-                                                                box.deleteAt(i);
+                                                                // box.deleteAt(i);
                                                               },
                                                               icon: const Icon(Icons.delete),
                                                             )
@@ -245,7 +264,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
 
                                                             trailing: IconButton(
                                                               onPressed: (){
-                                                                box.deleteAt(i);
+                                                                // box.deleteAt(i);
                                                               },
                                                               icon: const Icon(Icons.delete),
                                                             )
@@ -302,7 +321,7 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
 
                                                             trailing: IconButton(
                                                               onPressed: (){
-                                                                box.deleteAt(i);
+                                                                // box.deleteAt(i);
                                                               },
                                                               icon: const Icon(Icons.delete),
                                                             )
@@ -322,3 +341,5 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
     );
   }
 }
+
+

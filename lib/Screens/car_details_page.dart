@@ -183,7 +183,7 @@ void initState(){
 
                           ],
                           image: DecorationImage(
-                            image: FileImage(File(widget.car.imgPath.toString()),
+                            image: NetworkImage(widget.car.imgPath.toString()?? '',
                             // fit: BoxFit.scaleDown,
 
                           )

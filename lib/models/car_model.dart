@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,10 @@ class Car {
   @HiveField(9)
   String? ownerEmail;
 
+  @HiveField(10)
+  String? id;
+
+
   Car({
     @required this.name,
     @required this.description,
@@ -47,6 +52,30 @@ class Car {
     @required this.rating,
     @required this.type,
     @required this.ownerEmail,
+    this.id,
   });
+
+
+
+  factory Car.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
+    final data = document.data()!;
+
+
+    return Car(
+      id: document.id,
+      name: data['name'],
+      description: data['description'],
+      imgPath: data['image_url'],
+      power: data['power'],
+      range: data['range'],
+      seats: data['seats'],
+      brand: data['brand'],
+      rating: data['rating'],
+      type: data['type'],
+      ownerEmail: data['ownerEmail'],
+    );
+
+  }
+
 }
 

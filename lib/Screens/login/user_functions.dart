@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../models/car_model.dart';
+
 
 //all firebase db user operations
 class UserFunctions extends GetxController{
@@ -53,5 +55,36 @@ class UserFunctions extends GetxController{
     return  userData;
 
   }
+
+}
+
+
+class CarFunctions extends GetxController {
+  static CarFunctions get instance => Get.find();
+
+
+  //instance
+  final _db = FirebaseFirestore.instance;
+
+
+  Future<List<Car>> getAllCarDetails() async {
+
+    final snapshot = await _db.collection("cars").get();
+    final carData = snapshot.docs.map((e) => Car.fromSnapshot(e)).toList();
+    return  carData;
+
+  }
+
+// single user's cars
+
+  Future<Car> getCarDetails(String email) async {
+
+    final snapshot = await _db.collection("cars").where("ownerEmail", isEqualTo: email).get();
+    final carData = snapshot.docs.map((e) => Car.fromSnapshot(e)).single;
+    return  carData;
+
+  }
+
+
 
 }
