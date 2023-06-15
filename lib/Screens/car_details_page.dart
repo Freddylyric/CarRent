@@ -196,24 +196,24 @@ void initState(){
                     Text(widget.car.name.toString(),
                       style: mainHeading,
                     ),
-                    const SizedBox(height: 5,),
-                    Text(widget.car.brand.toString(),
-                      style: subHeading,
-                      // textAlign: TextAlign.left,
-                    ),
+                    // const SizedBox(height: 5,),
+                    // Text(widget.car.brand.toString(),
+                    //   style: subHeading,
+                    //   // textAlign: TextAlign.left,
+                    // ),
                     const SizedBox(height: 10,),
                     Row(
                       children:  [
                         const Icon(Icons.star, size: 24, color: Color(0xFFFFC817),),
                         const SizedBox(width: 5,),
-                        Text(widget.car.rating.toString(), style: subHeading)
+                        Text(widget.car.rating.toString()?? '', style: subHeading)
                         // Text(rating as String, style: sub Heading,),
                       ]
                     ),
 
                      Text('Description', style: mainHeading,),
                     const SizedBox(height: 5,),
-                    Text(widget.car.description .toString(), style: subHeading,),
+                    Text(widget.car.description .toString()?? '', style: subHeading,),
 
                     const SizedBox(height: 10,),
                     Container(
@@ -250,7 +250,7 @@ void initState(){
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(widget.car.power.toString(), style: subHeading,),
+                                    Text(widget.car.power.toString(), style: subHeading, textAlign: TextAlign.center),
                                   ],
                                 ),
                               ),
@@ -265,7 +265,7 @@ void initState(){
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(widget.car.seats.toString(), style: subHeading,),
+                                    Text(widget.car.seats.toString(), style: subHeading, textAlign: TextAlign.center),
                                   ],
                                 ),
                               ),
@@ -280,7 +280,7 @@ void initState(){
                                       style: mainHeading,
                                     ),
                                     const SizedBox(height: 3),
-                                    Text(widget.car.range.toString(), style: subHeading,),
+                                    Text(widget.car.range.toString(), style: subHeading, textAlign: TextAlign.center),
                                   ],
                                 ),
                               ),

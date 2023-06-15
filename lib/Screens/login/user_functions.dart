@@ -56,6 +56,13 @@ class UserFunctions extends GetxController{
 
   }
 
+
+  Future<void> updateUserRecord(UserModel user) async {
+    await _db.collection("users").doc(user.id).update(user.toJson());
+
+
+  }
+
 }
 
 
@@ -77,10 +84,10 @@ class CarFunctions extends GetxController {
 
 // single user's cars
 
-  Future<Car> getCarDetails(String email) async {
+  Future<List<Car>> getCarDetails(String email) async {
 
     final snapshot = await _db.collection("cars").where("ownerEmail", isEqualTo: email).get();
-    final carData = snapshot.docs.map((e) => Car.fromSnapshot(e)).single;
+    final carData = snapshot.docs.map((e) => Car.fromSnapshot(e)).toList();
     return  carData;
 
   }

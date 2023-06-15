@@ -20,6 +20,7 @@ class AuthenticationFunctions extends GetxController{
 
   @override
   void onReady() {
+    Future.delayed(const Duration(seconds: 6));
     firebaseUser = Rx<User?>(_auth.currentUser);
 
     //give user stream to fetch any firebase changes

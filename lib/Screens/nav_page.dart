@@ -51,7 +51,7 @@ class _NavPageState extends State<NavPage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.directions_car), label: 'Cars'),
-          BottomNavigationBarItem(icon: Icon(Icons.send), label: 'Share'),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Share'),
           BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notifications'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:car_rent/Screens/login/authentication_functions.dart';
 import 'package:car_rent/Screens/profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,16 +15,17 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../remote_config.dart';
+import 'cars_home_page.dart';
 import 'login/user_functions.dart';
 
-class CarsHomePage extends StatefulWidget {
-  const CarsHomePage({Key? key}) : super(key: key);
+class MyListingsScreen extends StatefulWidget {
+  const MyListingsScreen({Key? key}) : super(key: key);
 
   @override
-  State<CarsHomePage> createState() => _CarsHomePageState();
+  State<MyListingsScreen> createState() => _MyListingsScreenState();
 }
 
-class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderStateMixin {
+class _MyListingsScreenState extends State<MyListingsScreen> with SingleTickerProviderStateMixin {
 
   late String _selectedOption;
   // late TabController _tabController;
@@ -104,7 +103,7 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
               appBar: AppBar(
-                title:  Text('Home', style: mainHeading),
+                title:  Text('My Listings', style: mainHeading),
                 backgroundColor: AppColors.secondaryColor,
                 centerTitle: true,
                 elevation: 0,
@@ -217,7 +216,7 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                             children: [
 
                               FutureBuilder<List<Car>>(
-                                  future: controller.getAllCarsDetails(),
+                                  future: controller.getUsersCarsData(),
                                   builder: (context, snapshot){
                                     if(snapshot.connectionState == ConnectionState.done){
 
@@ -272,15 +271,42 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
                                                       maxLines: 2,
                                                       overflow: TextOverflow.ellipsis,
                                                     ),
-                                                    // trailing: IconButton(
-                                                    //   onPressed: () {
-                                                    //     FirebaseFirestore.instance
-                                                    //         .collection('cars')
-                                                    //         .doc(carData[i].id)
-                                                    //         .delete();
-                                                    //   },
-                                                    //   icon: const Icon(Icons.delete),
-                                                    // ),
+                                                    trailing: IconButton(
+                                                      onPressed: () {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext context) {
+                                                            return AlertDialog(
+                                                              title: const Text('Delete Listing'),
+                                                              content: const Text('Are you sure you want to delete this listing?'),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    // Close the dialog
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                  child: const Text('Cancel'),
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    // Delete the listing
+                                                                    FirebaseFirestore.instance
+                                                                        .collection('cars')
+                                                                        .doc(carData[i].id)
+                                                                        .delete();
+                                                                    // Close the dialog
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                  child: const Text('Delete',),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                      icon: const Icon(Icons.delete),
+                                                    ),
+
                                                   ),
                                                 ),
                                               );
@@ -345,38 +371,8 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
             );
 
           } else {
-            return const CircularProgressIndicator();
+            return Center(child:const CircularProgressIndicator());
           }
 
 
         });}}
-
-
-
-class CarsController extends GetxController {
-  static CarsController get instance  =>Get.find();
-
-
-  final _authFunctions = Get.put(AuthenticationFunctions());
-  final _carFunctions = Get.put(CarFunctions());
-  //query the data. first get user's email
-  getUsersCarsData(){
-
-    final email = _authFunctions.firebaseUser.value?.email;
-    if (email != null){
-      return  _carFunctions.getCarDetails(email);
-
-    } else{
-      Get.snackbar("Error", "Login to proceed");
-    }
-  }
-
-  getAllCarsDetails(){
-
-    return _carFunctions.getAllCarDetails();
-  }
-
-
-
-}
-

@@ -1,16 +1,22 @@
+import 'package:car_rent/Screens/update_profile_screen.dart';
+import 'package:car_rent/main.dart';
 import 'package:car_rent/models/user_model.dart';
+import 'package:car_rent/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import 'MyListingsScreen.dart';
 import 'login/authentication_functions.dart';
 import 'login/user_functions.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final controller = Get.put(ProfileController());
+    final _authFunctions = Get.put(AuthenticationFunctions());
 
 
     return Scaffold(
@@ -26,38 +32,103 @@ class ProfileScreen extends StatelessWidget {
             if (snapshot.hasData){
               UserModel userData = snapshot.data as UserModel;
               return  Container(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
 
                   children: [
+                    SizedBox(height: 20,),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10),
 
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(userData.imageUrl ?? ''),
+                      ),
+                      height: size.height * 0.2,
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 70,
+                                  backgroundImage: NetworkImage(userData.imageUrl ?? ''),
+                                ),
+                                if (userData.imageUrl == null || userData.imageUrl!.isEmpty)
+                                  Icon(
+                                    Icons.person,
+                                    size: 70,
+                                  ),
+                              ],
+                            ),
+
+                            SizedBox(width: 20,),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+
+                                  Text(userData.name ?? '', style: mainHeading),
+                                  Text(userData.email ?? '', style: mainHeading),
+                                  Text(userData.phoneNumber ?? '', style: mainHeading),
+                                  Text('Member Since: ${userData.createdAt?.day}/${userData.createdAt?.month}/${userData.createdAt?.year}',
+                                    style: subHeading
+                                  ),
+                                  // ElevatedButton(onPressed: (){
+                                  //   //TODO: EDIT PROFILE
+                                  //   // Get.to(EditProfileScreen());
+                                  //
+                                  // }, child: Text("Edit Profile"))
+                                ]
+                            )
+                          ]
+
+                      ),
+
                     ),
-                    SizedBox(height: 16.0),
-                    Text(
-                      'Email: ${userData.email}',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      'Phone: ${userData.phoneNumber}',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      'Member Since: ${userData.createdAt.day}/${userData.createdAt.month}/${userData.createdAt.year}',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        // TODO: Implement edit profile functionality
-                      },
-                      child: Text('Edit Profile'),
+
+                    SizedBox(height: 20,),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              //TODO: MY LISTINGS
+                               Get.to(MyListingsScreen());
+
+                            },
+                            child: ListTile(
+                              leading: Icon(Icons.list_alt_outlined,  color: Colors.red,),
+                              title: Text("My Listings", style: mainHeading,),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              //TODO: EDIT PRIFILE
+                              Get.to(UpdateProfileScreen());
+                            },
+                            child: ListTile(
+                              leading: Icon(Icons.edit,  color: Colors.red,),
+                              title: Text("Edit Profile", style: mainHeading,),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              _authFunctions.signOut();
+
+                            },
+                            child: ListTile(
+                              leading: Icon(Icons.exit_to_app_sharp,  color: Colors.red,),
+                              title: Text("Log Out", style: mainHeading,),
+                            ),
+                          ),
+
+                        ],
+                      ),
+
                     ),
                   ],
                 ),
@@ -80,10 +151,10 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // String _formatDate(String dateString) {
-  //   final date = DateTime.parse(dateString);
-  //   return '${date.day}/${date.month}/${date.year}';
-  // }
+// String _formatDate(String dateString) {
+//   final date = DateTime.parse(dateString);
+//   return '${date.day}/${date.month}/${date.year}';
+// }
 }
 
 
@@ -91,19 +162,27 @@ class ProfileController extends GetxController {
   static ProfileController get instance  =>Get.find();
 
 
+
+
   final _authFunctions = Get.put(AuthenticationFunctions());
   final _userFunctions = Get.put(UserFunctions());
   //query the data. first get user's email
-   getUserData(){
+  getUserData(){
 
-     final email = _authFunctions.firebaseUser.value?.email;
-     if (email != null){
+    final email = _authFunctions.firebaseUser.value?.email;
+    if (email != null){
       return  _userFunctions.getUserDetails(email);
 
-     } else{
-       Get.snackbar("Error", "Login to proceed");
-     }
-   }
+    } else{
+      Get.snackbar("Error", "Login to proceed");
+    }
+  }
+
+
+  updateRecord(UserModel user) async{
+    await  _userFunctions.updateUserRecord(user);
+  }
+
 }
 
 

@@ -50,7 +50,7 @@ final bodyText = GoogleFonts.poppins(
   fontWeight: FontWeight.w400,
   height: 18 / 12,
   letterSpacing: 1,
-  color: Color(0xff8F8B8A),
+  color: Color(0xff302D2C),
 );
 
 
@@ -69,6 +69,7 @@ class ButtonStyleConstants {
   EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0);
   static const Color primaryColor = Colors.redAccent;
   static const Color secondaryColor = Colors.white;
+  static const Color blackColor = Colors.black;
 
   static final ButtonStyle primaryButtonStyle = ElevatedButton.styleFrom(
     backgroundColor: primaryColor,
@@ -97,11 +98,12 @@ class ButtonStyleConstants {
     minimumSize: const Size(buttonWidth, buttonHeight),
   );
   static final ButtonStyle smallButtonStyle = ElevatedButton.styleFrom(
-    backgroundColor: primaryColor,
+    backgroundColor: blackColor,
     padding: buttonPadding,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(borderRadius),
     ),
+
     minimumSize: const Size(smallButtonWidth, smallButtonHeight),
 
   );

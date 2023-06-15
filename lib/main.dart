@@ -138,7 +138,7 @@ class MyApp extends StatelessWidget{
           primaryColor: Colors.white,
           accentColor: Colors.blue
       ),
-      home: const SplashScreen(),
+      home: CircularProgressIndicator(),
     );
   }
 }

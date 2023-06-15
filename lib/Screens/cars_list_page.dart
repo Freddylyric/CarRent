@@ -206,12 +206,12 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                               overflow: TextOverflow.ellipsis,),
 
 
-                                                            trailing: IconButton(
-                                                              onPressed: (){
-                                                                // box.deleteAt(i);
-                                                              },
-                                                              icon: const Icon(Icons.delete),
-                                                            )
+                                                            // trailing: IconButton(
+                                                            //   onPressed: (){
+                                                            //     // box.deleteAt(i);
+                                                            //   },
+                                                            //   icon: const Icon(Icons.delete),
+                                                            // )
                                                         ),
                                                       ),);
 
@@ -262,12 +262,12 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                               overflow: TextOverflow.ellipsis,),
 
 
-                                                            trailing: IconButton(
-                                                              onPressed: (){
-                                                                // box.deleteAt(i);
-                                                              },
-                                                              icon: const Icon(Icons.delete),
-                                                            )
+                                                            // trailing: IconButton(
+                                                            //   onPressed: (){
+                                                            //     // box.deleteAt(i);
+                                                            //   },
+                                                            //   icon: const Icon(Icons.delete),
+                                                            // )
                                                         ),
                                                       ),);
 
@@ -319,12 +319,12 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
                                                               overflow: TextOverflow.ellipsis,),
 
 
-                                                            trailing: IconButton(
-                                                              onPressed: (){
-                                                                // box.deleteAt(i);
-                                                              },
-                                                              icon: const Icon(Icons.delete),
-                                                            )
+                                                            // trailing: IconButton(
+                                                            //   onPressed: (){
+                                                            //     // box.deleteAt(i);
+                                                            //   },
+                                                            //   icon: const Icon(Icons.delete),
+                                                            // )
                                                         ),
                                                       ),);
                                                     }),

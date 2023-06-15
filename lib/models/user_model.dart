@@ -10,7 +10,7 @@ class UserModel{
   final String password;
   final String? imageUrl;
   final String? role;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   const UserModel({
     this.id,
@@ -20,7 +20,7 @@ class UserModel{
     required this.password,
      this.imageUrl,
      this.role,
-    required this.createdAt,
+     this.createdAt,
   });
 
 
@@ -33,7 +33,7 @@ class UserModel{
       'password': password,
       'imageUrl': imageUrl,
       'role': role,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
 
     };
   }
