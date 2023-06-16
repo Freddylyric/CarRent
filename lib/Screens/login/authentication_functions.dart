@@ -1,88 +1,100 @@
-
-
 import 'package:car_rent/Screens/cars_home_page.dart';
+import 'package:car_rent/Screens/login/mail_verification.dart';
 import 'package:car_rent/Screens/nav_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import 'login_screen.dart';
 
-class AuthenticationFunctions extends GetxController{
+class AuthenticationFunctions extends GetxController {
   static AuthenticationFunctions get instance => Get.find();
 
-
   final _auth = FirebaseAuth.instance;
+
   //changes (convert to stream using getX)
-  late final Rx<User?> firebaseUser;
+  late final Rx<User?> _firebaseUser;
+
+
+  //getters
+
+  User? get firebaseUser => _firebaseUser.value;
+
+
+
 //redirect already logged in users
 
   //on ready is called when authfns are ready after being called in main.dart
 
   @override
   void onReady() {
-    Future.delayed(const Duration(seconds: 6));
-    firebaseUser = Rx<User?>(_auth.currentUser);
+    // Future.delayed(const Duration(seconds: 6));
+    _firebaseUser = Rx<User?>(_auth.currentUser);
 
     //give user stream to fetch any firebase changes
-    firebaseUser.bindStream(_auth.userChanges());
+    _firebaseUser.bindStream(_auth.userChanges());
     //FlutterNativeSplash.remove();
-    ever(firebaseUser, _setInitialScreen);
-
-
-
+    //ever(firebaseUser, _setInitialScreen);
+    setInitialScreen(_firebaseUser.value);
   }
 
-
-  _setInitialScreen(User? user){
-    user == null ? Get.offAll(() => LoginScreen()) :  Get.offAll(() => const NavPage());
+  setInitialScreen(User? user) {
+    user == null
+        ? Get.offAll(() => LoginScreen())
+        : user.emailVerified
+            ? Get.offAll(() => const NavPage())
+            : Get.offAll(const MailVerification());
   }
 
-
-  Future<void> createUserWithEmailAndPassword(String email, String password) async{
-    try{
+  Future<void> createUserWithEmailAndPassword(String email, String password) async {
+    try {
       await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
-      firebaseUser.value!=null ? Get.offAll(() => const NavPage()) : Get.offAll(() =>  LoginScreen());
-    } on FirebaseAuthException catch(e){
-      if(e.code == 'weak-password'){
+      firebaseUser!= null ? Get.offAll(() => const NavPage()) : Get.offAll(() => LoginScreen());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
         Get.snackbar("Weak Password", "The password provided is too weak");
-      }
-      else if(e.code == 'email-already-in-use'){
+      } else if (e.code == 'email-already-in-use') {
         Get.snackbar("Email already in use", "The account already exists for that email");
       }
-
-    } catch(e){
+    } catch (e) {
       Get.snackbar("Error", e.toString());
-
     }
-     }
+  }
 
-     Future<void> signInWithEmailAndPassword(String email, String password) async{
-      try{
-        await _auth.signInWithEmailAndPassword(email: email, password: password);
-        firebaseUser.value!=null ? Get.offAll(() => const NavPage()) : Get.offAll(() =>  LoginScreen());
-      } on FirebaseAuthException catch(e){
-        if(e.code == 'user-not-found'){
-          Get.snackbar("User not found", "No user found for that email");
-        }
-        else if(e.code == 'wrong-password'){
-          Get.snackbar("Wrong Password", "Wrong password provided for that user");
-        }
-      } catch(e){
-        Get.snackbar("Error", e.toString());
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      firebaseUser!= null ? Get.offAll(() => const NavPage()) : Get.offAll(() => LoginScreen());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Get.snackbar("User not found", "No user found for that email");
+      } else if (e.code == 'wrong-password') {
+        Get.snackbar("Wrong Password", "Wrong password provided for that user");
       }
-     }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
 
-     Future<void> signOut() async{
-      await _auth.signOut();
-     }
+  Future<void> signOut() async {
+    await _auth.signOut();
+    await FirebaseAuth.instance.signOut();
+    Get.offAll(() => LoginScreen());
 
+  }
 
-
+  Future<void> sendEmailVerification() async {
+    try {
+      await _auth.currentUser?.sendEmailVerification();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Get.snackbar("User not found", "No user found for that email");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
 }
-
-
-
 
 // import 'package:car_rent/Screens/cars_home_page.dart';
 // import 'package:car_rent/Screens/nav_page.dart';

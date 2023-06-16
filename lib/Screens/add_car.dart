@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:car_rent/utils/colors.dart' as AppColors;
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:car_rent/models/car_model.dart';
@@ -76,7 +77,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     final _authFunctions = Get.put(AuthenticationFunctions());
     final _userFunctions = Get.put(UserFunctions());
 
-     _email = _authFunctions.firebaseUser.value?.email;
+     _email = _authFunctions.firebaseUser?.email;
     if (_email != null) {
       // return  _userFunctions.getUserDetails(email);
       submitData();
@@ -170,7 +171,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         backgroundColor: AppColors.secondaryColor,
         centerTitle: true,
         elevation: 0,
-        title:  Text('Add a Car',style: mainHeading),
+        title:  Text('Add a Car',style: GoogleFonts.poppins(color: Colors.black, fontWeight: FontWeight.bold),),
 
 
 
@@ -192,6 +193,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Name',
+                      border:  OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      )
                   ),
                   autocorrect: false,
                   onChanged: (val){
@@ -200,10 +204,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     });
                   },
                 ),
-
+                SizedBox(height: 5,),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Description',
+                    border:  OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                   autocorrect: false,
 
@@ -215,9 +222,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     });
                   },
                 ),
+                SizedBox(height: 5,),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Power',
+                      border:  OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      )
                   ),
                   autocorrect: false,
 
@@ -227,9 +238,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     });
                   },
                 ),
+                SizedBox(height: 5,),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Range',
+                      border:  OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      )
                   ),
                   autocorrect: false,
 
@@ -239,9 +254,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     });
                   },
                 ),
+                SizedBox(height: 5,),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Seats',
+                      border:  OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      )
                   ),
                   autocorrect: false,
 
@@ -251,9 +270,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     });
                   },
                 ),
+                SizedBox(height: 5,),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Type: Automatic/ Electric',
+                      border:  OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      )
                   ),
                   autocorrect: false,
 

@@ -4,6 +4,7 @@ import 'package:car_rent/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/user_model.dart';
 
@@ -33,7 +34,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               Navigator.pop(context);
             },
             child: Icon(Icons.arrow_back_ios, color: Colors.white)),
-        title: Text('Edit Profile', style: whiteHeading),
+        title: Text('Edit Profile', style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),),
         centerTitle: true,
       ),
 

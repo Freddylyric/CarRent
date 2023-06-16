@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     }
                                 ),
 
-                                SizedBox(height: 20,),
+                                SizedBox(height: 10,),
                                 TextFormField(
                                     controller: controller.password,
                                     obscureText: _obscurePin,
@@ -117,11 +117,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   width: double.infinity,
                                   child: ElevatedButton(onPressed: (){
 
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
+
                                     //todo: add functionality to login
                                     if(_formKey.currentState!.validate()){
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
                                       SigninController.instance.loginUser(controller.email.text.trim(), controller.password.text.trim());
 
                                       setState(() {
@@ -164,7 +165,10 @@ class SigninController extends GetxController {
   void loginUser (String email, String password) {
 
     //
+    final auth = AuthenticationFunctions.instance;
     AuthenticationFunctions.instance.signInWithEmailAndPassword(email, password);
+
+    AuthenticationFunctions.instance.setInitialScreen(auth.firebaseUser);
   }
 
 }

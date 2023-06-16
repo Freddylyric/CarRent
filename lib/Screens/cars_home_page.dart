@@ -12,6 +12,7 @@ import 'package:car_rent/utils/utils.dart';
 import 'package:car_rent/models/car_model.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -104,7 +105,7 @@ class _CarsHomePageState extends State<CarsHomePage> with SingleTickerProviderSt
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
               appBar: AppBar(
-                title:  Text('Home', style: mainHeading),
+                title:  Text('Home', style: GoogleFonts.poppins(color: Colors.black, fontWeight: FontWeight.bold),),
                 backgroundColor: AppColors.secondaryColor,
                 centerTitle: true,
                 elevation: 0,
@@ -362,7 +363,7 @@ class CarsController extends GetxController {
   //query the data. first get user's email
   getUsersCarsData(){
 
-    final email = _authFunctions.firebaseUser.value?.email;
+    final email = _authFunctions.firebaseUser?.email;
     if (email != null){
       return  _carFunctions.getCarDetails(email);
 

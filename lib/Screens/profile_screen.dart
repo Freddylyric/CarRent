@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'MyListingsScreen.dart';
 import 'login/authentication_functions.dart';
@@ -22,7 +23,13 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text('Profile'),
+        leading: GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_ios, color: Colors.white)),
+        title: Text('Profile', style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),),
+        centerTitle: true,
       ),
       body: FutureBuilder(
         future: controller.getUserData(),
@@ -52,7 +59,7 @@ class ProfileScreen extends StatelessWidget {
                               alignment: Alignment.center,
                               children: [
                                 CircleAvatar(
-                                  radius: 70,
+                                  radius: 50,
                                   backgroundImage: NetworkImage(userData.imageUrl ?? ''),
                                 ),
                                 if (userData.imageUrl == null || userData.imageUrl!.isEmpty)
@@ -70,8 +77,8 @@ class ProfileScreen extends StatelessWidget {
                                 children: [
 
                                   Text(userData.name ?? '', style: mainHeading),
-                                  Text(userData.email ?? '', style: mainHeading),
-                                  Text(userData.phoneNumber ?? '', style: mainHeading),
+                                  Text(userData.email ?? '', style: bodyText),
+                                  Text(userData.phoneNumber ?? '', style: bodyText),
                                   Text('Member Since: ${userData.createdAt?.day}/${userData.createdAt?.month}/${userData.createdAt?.year}',
                                     style: subHeading
                                   ),
@@ -162,6 +169,12 @@ class ProfileController extends GetxController {
   static ProfileController get instance  =>Get.find();
 
 
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final passwordController = TextEditingController();
+
+
 
 
   final _authFunctions = Get.put(AuthenticationFunctions());
@@ -169,7 +182,7 @@ class ProfileController extends GetxController {
   //query the data. first get user's email
   getUserData(){
 
-    final email = _authFunctions.firebaseUser.value?.email;
+    final email = _authFunctions.firebaseUser?.email;
     if (email != null){
       return  _userFunctions.getUserDetails(email);
 

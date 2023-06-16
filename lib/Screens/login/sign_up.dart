@@ -178,17 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               });
                               //todo: add functionality to sign up
                               if (_formKey.currentState!.validate()) {
-                                final user = UserModel(
-                                  name: controller.fullName.text.trim(),
-                                  email: controller.email.text.trim(),
-                                  phoneNumber: controller.phoneNumber.text.trim(),
-                                  password: controller.password.text.trim(),
-                                  createdAt: DateTime.now(),
-
-
-                                );
-
-                                SignUpController.instance.createUser(user);
+                                controller.createUser();
                                 setState(() {
                                   _isLoading = false;
                                 });
@@ -263,20 +253,46 @@ class SignUpController extends GetxController {
   final userFunctions = Get.put(UserFunctions());
 
   //call this fn from design to register usr
-  void registerUser(String email, String password) {
-    //
-    String? error = AuthenticationFunctions.instance.createUserWithEmailAndPassword(email, password) as String?;
-    if (error != null) {
+  // void registerUser(String email, String password) {
+  //   //
+  //   String? error = AuthenticationFunctions.instance.createUserWithEmailAndPassword(email, password) as String?;
+  //   if (error != null) {
+  //     Get.showSnackbar(GetSnackBar(
+  //       message: error.toString(),
+  //     ));
+  //   }
+  // }
+
+  // Future<void> createUser (UserModel user) async {
+  //   await userFunctions.createUser(user);
+  //   SignUpController.instance.registerUser(user.email.trim(), user.password.trim());
+  // }
+
+
+
+
+  Future<void> createUser()async{
+
+    try{
+      final user = UserModel(
+        name: fullName.text.trim(),
+        email: email.text.trim(),
+        phoneNumber: phoneNumber.text.trim(),
+        password: password.text.trim(),
+        createdAt: DateTime.now(),
+      );
+
+      final auth = AuthenticationFunctions.instance;
+      await AuthenticationFunctions.instance.createUserWithEmailAndPassword(user.email, user.password);
+      await UserFunctions.instance.createUser(user);
+      auth.setInitialScreen(auth.firebaseUser);
+    } catch (e){
       Get.showSnackbar(GetSnackBar(
-        message: error,
+        message: e.toString(),
       ));
     }
   }
 
-  Future<void> createUser (UserModel user) async {
-    await userFunctions.createUser(user);
-    SignUpController.instance.registerUser(user.email.trim(), user.password.trim());
-  }
 }
 
 // class SignUpController {

@@ -109,12 +109,13 @@ void initState(){
 
 
     appBar: AppBar(
-
+      leading: GestureDetector(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: Icon(Icons.arrow_back_ios, color: Colors.black)),
       title:  Text('Car Details', style: mainHeading,),
       centerTitle: true,
-      leading: const BackButton(
-        color: Color(0xff302D2C),
-      ),
       backgroundColor: AppColors.secondaryColor,
       elevation: 0,
 

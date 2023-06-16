@@ -10,6 +10,7 @@ import 'package:car_rent/Screens/cars_home_page.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 
 import 'login/user_functions.dart';
@@ -69,17 +70,12 @@ class _CarsListPageState extends State<CarsListPage> with SingleTickerProviderSt
             child: Scaffold(
 
               appBar: AppBar(
-
-                leading: const BackButton(
-                  color: Color(0xff302D2C),
-                ),
-                // leading: IconButton(
-                //   icon: const Icon(Icons.menu, color: Color(0xff302D2C)),
-                //   onPressed: () {
-                //     //  code to handle the menu button press
-                //   },
-                // ),
-                title:  Text('Cars List', style: mainHeading),
+                leading: GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Icon(Icons.arrow_back_ios, color: Colors.black)),
+                title:  Text('Cars List', style: GoogleFonts.poppins(color: Colors.black, fontWeight: FontWeight.bold),),
                 backgroundColor: AppColors.secondaryColor,
                 centerTitle: true,
                 elevation: 0,
