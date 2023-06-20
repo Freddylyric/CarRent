@@ -63,6 +63,14 @@ class UserFunctions extends GetxController{
 
   }
 
+
+
+  Future<void> deleteUserRecord(String userId) async {
+    await _db.collection("users").doc(userId).delete();
+  }
+
+
+
 }
 
 

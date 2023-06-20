@@ -67,7 +67,7 @@ dependencies:
   google_mobile_ads: ^2.3.0
   get: ^4.6.5
   firebase_storage: ^11.2.2
-
+  multi_image_picker: ^4.8.1
   flutter_otp_text_field: ^1.1.1
 
 

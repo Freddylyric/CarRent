@@ -60,8 +60,27 @@ class ProfileScreen extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   radius: 50,
-                                  backgroundImage: NetworkImage(userData.imageUrl ?? ''),
+                                  // backgroundImage: NetworkImage(userData.imageUrl ?? ''),
+                                  backgroundColor: Colors.white,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      // border: Border.all(
+                                      //   color: Colors.white,
+                                      //   width: 2.0,
+                                      // ),
+                                    ),
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        userData.imageUrl ?? '',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
                                 ),
+
+
+
                                 if (userData.imageUrl == null || userData.imageUrl!.isEmpty)
                                   Icon(
                                     Icons.person,
@@ -80,7 +99,7 @@ class ProfileScreen extends StatelessWidget {
                                   Text(userData.email ?? '', style: bodyText),
                                   Text(userData.phoneNumber ?? '', style: bodyText),
                                   Text('Member Since: ${userData.createdAt?.day}/${userData.createdAt?.month}/${userData.createdAt?.year}',
-                                    style: subHeading
+                                      style: subHeading
                                   ),
                                   // ElevatedButton(onPressed: (){
                                   //   //TODO: EDIT PROFILE
@@ -104,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
                           GestureDetector(
                             onTap: (){
                               //TODO: MY LISTINGS
-                               Get.to(MyListingsScreen());
+                              Get.to(MyListingsScreen());
 
                             },
                             child: ListTile(
@@ -115,7 +134,7 @@ class ProfileScreen extends StatelessWidget {
                           GestureDetector(
                             onTap: (){
                               //TODO: EDIT PRIFILE
-                              Get.to(UpdateProfileScreen());
+                              Get.to(ProfileUpdateScreen());
                             },
                             child: ListTile(
                               leading: Icon(Icons.edit,  color: Colors.red,),
@@ -197,6 +216,5 @@ class ProfileController extends GetxController {
   }
 
 }
-
 
 

@@ -1,4 +1,5 @@
 import 'package:car_rent/Screens/login/authentication_functions.dart';
+import 'package:car_rent/Screens/login/login_screen.dart';
 import 'package:car_rent/Screens/login/user_functions.dart';
 import 'package:car_rent/widgets/form/form_header_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -217,7 +218,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: ButtonStyleConstants.secondaryButtonStyle,
                       )),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(
+                              () => LoginScreen(),
+                        );
+                      },
                       child:  Text.rich(TextSpan(children: [
                         TextSpan(
                           text: "Already have an account? ",
