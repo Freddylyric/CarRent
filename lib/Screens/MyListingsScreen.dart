@@ -1,5 +1,6 @@
 import 'package:car_rent/Screens/login/authentication_functions.dart';
 import 'package:car_rent/Screens/profile_screen.dart';
+import 'package:car_rent/Screens/update_car_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -256,7 +257,7 @@ class _MyListingsScreenState extends State<MyListingsScreen> with SingleTickerPr
                                                           )
                                                         ],
                                                         image: DecorationImage(
-                                                          image: NetworkImage(car.imgPath?? ''),
+                                                          image: NetworkImage(car.imageUrls!.isNotEmpty ? car.imageUrls![0] : '',),
                                                           fit: BoxFit.scaleDown,
                                                         ),
                                                       ),
@@ -271,41 +272,52 @@ class _MyListingsScreenState extends State<MyListingsScreen> with SingleTickerPr
                                                       maxLines: 2,
                                                       overflow: TextOverflow.ellipsis,
                                                     ),
-                                                    trailing: IconButton(
-                                                      onPressed: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext context) {
-                                                            return AlertDialog(
-                                                              title: const Text('Delete Listing'),
-                                                              content: const Text('Are you sure you want to delete this listing?'),
-                                                              actions: [
-                                                                TextButton(
-                                                                  onPressed: () {
-                                                                    // Close the dialog
-                                                                    Navigator.of(context).pop();
-                                                                  },
-                                                                  child: const Text('Cancel'),
-                                                                ),
-                                                                TextButton(
-                                                                  onPressed: () {
-                                                                    // Delete the listing
-                                                                    FirebaseFirestore.instance
-                                                                        .collection('cars')
-                                                                        .doc(carData[i].id)
-                                                                        .delete();
-                                                                    // Close the dialog
-                                                                    Navigator.of(context).pop();
-                                                                  },
-                                                                  child: const Text('Delete',),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      icon: const Icon(Icons.delete),
-                                                    ),
+                                                    trailing:
+                                                      IconButton(
+                                                        onPressed: (){
+                                                          Get.to(() => UpdateCarScreen(car: car));
+
+                                                        }, icon: Icon(Icons.edit),
+                                                      )
+
+
+
+
+                                                    // IconButton(
+                                                    //   onPressed: () {
+                                                    //     showDialog(
+                                                    //       context: context,
+                                                    //       builder: (BuildContext context) {
+                                                    //         return AlertDialog(
+                                                    //           title: const Text('Delete Listing'),
+                                                    //           content: const Text('Are you sure you want to delete this listing?'),
+                                                    //           actions: [
+                                                    //             TextButton(
+                                                    //               onPressed: () {
+                                                    //                 // Close the dialog
+                                                    //                 Navigator.of(context).pop();
+                                                    //               },
+                                                    //               child: const Text('Cancel'),
+                                                    //             ),
+                                                    //             TextButton(
+                                                    //               onPressed: () {
+                                                    //                 // Delete the listing
+                                                    //                 FirebaseFirestore.instance
+                                                    //                     .collection('cars')
+                                                    //                     .doc(carData[i].id)
+                                                    //                     .delete();
+                                                    //                 // Close the dialog
+                                                    //                 Navigator.of(context).pop();
+                                                    //               },
+                                                    //               child: const Text('Delete',),
+                                                    //             ),
+                                                    //           ],
+                                                    //         );
+                                                    //       },
+                                                    //     );
+                                                    //   },
+                                                    //   icon: const Icon(Icons.delete),
+                                                    // ),
 
                                                   ),
                                                 ),

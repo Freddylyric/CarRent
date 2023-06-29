@@ -19,7 +19,7 @@ class CarAdapter extends TypeAdapter<Car> {
     return Car(
       name: fields[0] as String?,
       description: fields[1] as String?,
-      imgPath: fields[2] as String?,
+      imageUrls: (fields[2] as List?)?.cast<String>(),
       power: fields[3] as String?,
       range: fields[4] as String?,
       seats: fields[5] as String?,
@@ -40,7 +40,7 @@ class CarAdapter extends TypeAdapter<Car> {
       ..writeByte(1)
       ..write(obj.description)
       ..writeByte(2)
-      ..write(obj.imgPath)
+      ..write(obj.imageUrls)
       ..writeByte(3)
       ..write(obj.power)
       ..writeByte(4)

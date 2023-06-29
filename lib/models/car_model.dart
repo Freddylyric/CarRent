@@ -14,7 +14,7 @@ class Car {
   String? description;
 
   @HiveField(2)
-  String? imgPath;
+  List<String>? imageUrls;
 
   @HiveField(3)
   String? power;
@@ -40,32 +40,46 @@ class Car {
   @HiveField(10)
   String? id;
 
-
   Car({
     @required this.name,
     @required this.description,
-    @required this.imgPath,
-    @required this.power,
-    @required this.range,
-    @required this.seats,
-    @required this.brand,
-    @required this.rating,
-    @required this.type,
+    this.imageUrls,
+    this.power,
+     this.range,
+    this.seats,
+     this.brand,
+     this.rating,
+     this.type,
     @required this.ownerEmail,
     this.id,
   });
 
 
 
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'description': description,
+      'image_urls': List<dynamic>.from(imageUrls ?? []),
+      'power': power,
+      'range': range,
+      'seats': seats,
+      'brand': brand,
+      'rating': rating,
+      'type': type,
+      'ownerEmail': ownerEmail,
+    };
+  }
+
+
   factory Car.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
-
 
     return Car(
       id: document.id,
       name: data['name'],
       description: data['description'],
-      imgPath: data['image_url'],
+      imageUrls: List<String>.from(data['image_urls'] ?? []),
       power: data['power'],
       range: data['range'],
       seats: data['seats'],
@@ -74,8 +88,5 @@ class Car {
       type: data['type'],
       ownerEmail: data['ownerEmail'],
     );
-
   }
-
 }
-

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:car_rent/Screens/cars_home_page.dart';
 import 'package:car_rent/Screens/nav_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,17 +13,11 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:car_rent/models/car_model.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'dart:async';
-
 import '../utils/utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'login/authentication_functions.dart';
 import 'login/user_functions.dart';
-
-
 
 class AddCarScreen extends StatefulWidget {
   const AddCarScreen({Key? key}) : super(key: key);
@@ -36,235 +29,297 @@ class AddCarScreen extends StatefulWidget {
 class _AddCarScreenState extends State<AddCarScreen> {
 
   final _formKey = GlobalKey<FormState>();
-  late String _uniqueFileName= "";
-
-  File? image;
+  List<File> images = [];
+  List<String> imagePaths = [];
   String? name;
   String? description;
   String? brand;
-  String?  power;
-  String?  range;
-  String?  seats;
+  String? power;
+  String? range;
+  String? seats;
   String? type;
   String? rating;
- late String? _email ="";
+  late String? _email = "";
+  late String _uniqueFileName = "";
+  bool _isLoading = false;
 
-
-  Future pickImage() async {
+  Future pickImages() async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
+      final pickedImages = await ImagePicker().pickMultiImage(
+        imageQuality: 80,
+      );
 
-      final imageTemporary = File(image.path);
-      print(image.path);
+      if (pickedImages == null) return;
 
-      //create unique name for image using timestamp
-     _uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
+      List<File> tempImages = [];
+      List<String> tempImagePaths = [];
+
+      for (final pickedImage in pickedImages) {
+        final imageTemporary = File(pickedImage.path);
+        print(pickedImage.path);
+
+        // create unique name for image using timestamp
+        _uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+        tempImages.add(imageTemporary);
+        tempImagePaths.add(pickedImage.path);
+      }
 
       setState(() {
-        this.image = imageTemporary;
+        images = tempImages;
+        imagePaths = tempImagePaths;
       });
     } on PlatformException catch (e) {
       if (kDebugMode) {
-        print('Failed to pick image: $e');
+        print('Failed to pick images: $e');
       }
       // TODO
     }
-
   }
 
   verifyUser() {
+    setState(() {
+      _isLoading = true;
+    });
+
+
     final _authFunctions = Get.put(AuthenticationFunctions());
     final _userFunctions = Get.put(UserFunctions());
 
-     _email = _authFunctions.firebaseUser?.email;
+    _email = _authFunctions.firebaseUser?.email;
     if (_email != null) {
       // return  _userFunctions.getUserDetails(email);
       submitData();
     } else {
       Get.snackbar("Error", "Login and Verify your Email to proceed");
     }
+
+    setState(() {
+      _isLoading = true;
+    });
   }
 
-  submitData() async{
-
-
-
+  submitData() async {
     final isValid = _formKey.currentState!.validate();
-    if(isValid){
-      Hive.box<Car>('car').add(Car(
-          name: name, description: description,
-          imgPath: image!.path,
-          brand: brand,  type: type, power: power, range:range, seats: seats, rating: rating, ));
+    if (isValid) {
+      final car = Car(
+        name: name,
+        description: description,
+        imageUrls: [], // Initialize an empty list for image URLs
+        power: power,
+        range: range,
+        seats: seats,
+        brand: brand,
+        rating: rating,
+        type: type,
+        ownerEmail: _email,
+      );
 
+      final carBox = Hive.box<Car>('car');
+      carBox.add(car);
 
-        // Create a new document reference in the "cars" collection
-        final carRef = FirebaseFirestore.instance.collection('cars').doc();
+      // Create a new document reference in the "cars" collection
+      final carRef = FirebaseFirestore.instance.collection('cars').doc();
 
+      // Create a map of car data
+      final carData = {
+        'name': name,
+        'description': description,
+        'brand': brand,
+        'power': power,
+        'range': range,
+        'seats': seats,
+        'type': type,
+        'rating': rating,
+        'ownerEmail': _email,
+        'image_urls': [], // Initialize an empty list for image URLs
+      };
 
-        // Create a map of car data
-        final carData = {
-          'name': name,
-          'description': description,
-          'brand': brand,
-          'power': power,
-          'range': range,
-          'seats': seats,
-          'type': type,
-          'rating': rating,
-          'ownerEmail': _email,
-        };
+      // Save the car data to Firestore
+      await carRef.set(carData);
 
-        // Save the car data to Firestore
-        await carRef.set(carData);
+      // Upload the image files to Firebase Storage
+      for (int i = 0; i < images.length; i++) {
+        final image = images[i];
+        final uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
 
-        // Upload the image file to Firebase Storage
-        if (image != null) {
+        // get a reference to storage root
+        Reference referenceRoot = FirebaseStorage.instance.ref();
+        Reference referenceDirImages = referenceRoot.child('images');
 
-          // get a reference to storage root
-          Reference referenceRoot = FirebaseStorage.instance.ref();
-          Reference referenceDirImages = referenceRoot.child('images');
+        // create a reference for the image to be stored
+        Reference referenceImageToUpload = referenceDirImages.child(uniqueFileName);
 
-          //create a reference for the image to be stored
-          Reference referenceImageToUpload = referenceDirImages.child(_uniqueFileName);
+        try {
+          await referenceImageToUpload.putFile(File(image.path));
+          final imageUrl = await referenceImageToUpload.getDownloadURL();
 
-          try {
-            await referenceImageToUpload.putFile(File(image!.path));
-            final imageUrl= await referenceImageToUpload.getDownloadURL();
-            carRef.update({'image_url': imageUrl});
-            print("image stored");
+          // Add the image URL to the car document
+          await carRef.update({'image_urls': FieldValue.arrayUnion([imageUrl])});
+          print("Image stored");
 
-          }catch(error){
-
-          }
-          // store teimage file
-
-
-
-
-
-
-
-          // final storageRef =
-          // FirebaseStorage.instance.ref().child('car_images/${carRef.id}');
-          // final uploadTask = storageRef.putFile(image!);
-          // await uploadTask.whenComplete(() {});
-          //
-          // final imageUrl = await storageRef.getDownloadURL();
-          // carRef.update({'image_url': imageUrl});
+        } catch (error) {
+          print("Error uploading image: $error");
         }
-
+      }
     }
+
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const NavPage()),
     );
+
+
   }
 
 
 
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.secondaryColor,
         centerTitle: true,
         elevation: 0,
-        title:  Text('Add a Car',style: GoogleFonts.poppins(color: Colors.black, fontWeight: FontWeight.bold),),
+        title: Text(
+          'Add a Car',
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
 
-
-
-        actions: [
-          IconButton(
-            onPressed: verifyUser,
-            icon: const Icon(Icons.save, color: Colors.red),
-          )
-        ],
       ),
-
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
+      body:  SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: ListView(
+            child: Form (
+              key: _formKey,
+              child:Column(
               children: [
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Name',
-                      border:  OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      )
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                   autocorrect: false,
-                  onChanged: (val){
+                  onChanged: (val) {
                     setState(() {
                       name = val;
                     });
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter the name ';
+                    }
+
+                    // additional validation logic for the phone number
+                    return null;
                   },
                 ),
                 SizedBox(height: 5,),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Description',
-                    border:  OutlineInputBorder(
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
                   ),
                   autocorrect: false,
-
                   minLines: 2,
                   maxLines: 10,
-                  onChanged: (val){
+                  onChanged: (val) {
                     setState(() {
                       description = val;
                     });
                   },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter the description ';
+                      }
+
+                      // additional validation logic for the phone number
+                      return null;
+                    }
                 ),
                 SizedBox(height: 5,),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Power',
-                      border:  OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      )
-                  ),
-                  autocorrect: false,
+                Row(
 
-                  onChanged: (val){
-                    setState(() {
-                      power = val;
-                    });
-                  },
-                ),
-                SizedBox(height: 5,),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Range',
-                      border:  OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      )
-                  ),
-                  autocorrect: false,
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Engine capacity (cc)',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                        ),
+                        autocorrect: false,
+                        onChanged: (val) {
+                          setState(() {
+                            power = val;
+                          });
 
-                  onChanged: (val){
-                    setState(() {
-                     range = val;
-                    });
-                  },
+                        },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter the cc ';
+                            }
+
+                            // additional validation logic for the phone number
+                            return null;
+                          }
+                      ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Price (Ksh)',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                          ),
+                          autocorrect: false,
+                          onChanged: (val) {
+                            setState(() {
+                              range = val;
+                            });
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter the price ';
+                            }
+
+                            // additional validation logic for the phone number
+                            return null;
+                          }
+                      ),
+                    ),
+                  ],
                 ),
+
+
                 SizedBox(height: 5,),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Seats',
-                      border:  OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      )
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                   autocorrect: false,
-
-                  onChanged: (val){
+                  onChanged: (val) {
                     setState(() {
                       seats = val;
                     });
@@ -273,45 +328,81 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 SizedBox(height: 5,),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Type: Automatic/ Electric',
-                      border:  OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      )
+                    labelText: 'Type: Automatic/ Manual',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                   autocorrect: false,
-
-                  onChanged: (val){
+                  onChanged: (val) {
                     setState(() {
                       type = val;
                     });
                   },
                 ),
-
-
                 const SizedBox(
-                  height: 25,
-
+                  height: 10,
                 ),
-                image == null ? Container() :
-                Image.file(
-                  File(image!.path),
-                  width: double.infinity,
-                  height: 300,
-                  fit: BoxFit.cover,
+                Text("Please upload some images"),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: size.height*0.15,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+
+                  child: Row(
+                    children: [
+                      FloatingActionButton(
+                        onPressed: pickImages,
+                        backgroundColor: Colors.red,
+                        child: const Icon(Icons.camera_enhance),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: List.generate(
+                              images.length,
+                                  (index) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.file(
+                                  images[index],
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
 
+                SizedBox(height: 30,),
+                ElevatedButton(
+                  onPressed:(){
+                    if(_formKey.currentState!.validate()){
+                      _isLoading ? null : verifyUser();
+                    }
+
+                  } ,
+                  child: _isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text('Save car'),
+                  style: ButtonStyleConstants.primaryButtonStyle,
+                ),
               ],
             ),
           ),
-
         ),
-
-
       ),
-
-      floatingActionButton: FloatingActionButton(onPressed: pickImage,
-        backgroundColor: Colors. red,
-        child: const Icon(Icons.camera_enhance )),
     );
   }
 }

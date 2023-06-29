@@ -135,8 +135,7 @@ class MyApp extends StatelessWidget{
 
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: Colors.white,
-          accentColor: Colors.blue
+          primaryColor: Colors.white, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blue)
       ),
       home: CircularProgressIndicator(),
     );
